@@ -2,19 +2,21 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "BulletManager.h"
+
 class Player
 {
 public:
-	void update();
-	void takeDamadge();
-	void pickup();
-
+	void update();					//updates the player
+	void takeDamadge(int t_amount);	//lowers health
+	void pickup();					//pick up item
+									
 private:
-	void move();
-	void rotate();
-	void shoot();
-	void useCollectible();
-	void heal();
+	void move();					//moves player
+	void rotate();					//rotates player view
+	void shoot();					//shoots a bullet
+	void useCollectible();			//uses a collectible - caculates heal amount
+	void heal(int t_amount);		//highens health
 
 	sf::Vector2f position{ 0.0f, 0.0f };
 	sf::Angle m_rotation{ sf::degrees(0.0) };
@@ -23,6 +25,8 @@ private:
 
 	const static int MAX_HEALTH{ 100 };
 	int health{ MAX_HEALTH };
+
+	BulletManager bulletManager;
 
 	int collectibleCount{ 0 };
 	int keyCount{ 0 };
