@@ -1,101 +1,147 @@
 ```mermaid
 classDiagram
   class Window {
-    screenWidth
-    screenHeight
-    render
+    -screenWidth
+    -screenHeight
+
+    +render()
 }
 
   class Game {
-    update
-    processInputs
-}
 
-  class Collectible {
-    position
-    isActive
-}
-
-  class Cards {
-    cardsNumbers
-    cardsTypes
-    generateHand
-    calculateValue
+    -update()
+    -processInputs()
+    -spawnEnemy()
+    -checkCollision()
+    -gameOver()
 }
 
   class Player {
-    position
-    speed
-    levelLayout
-    health
-    collectibleCount
-    keyCount
+    -position
+    -direction
+    -speed
+    -health
+    -MAX_HEALTH
+    -shootingCooldown
+    -COOLDOWN_LENGTH
+    -collectibleCount
+    -keyCount
+
+    +update()
+    -move()
+    -rotate()
+    -shoot()
+    +takeDamadge(amount)
+    -useCollectible()
+    -heal(amount)
+    +pickUp()
+}
+
+  class Cards {
+    -cardsNumbers
+    -cardsTypes
+
+    +generateHand()
+    +calculateValue()
 }
 
   class Enemy {
-    position
-    speed
-    levelLayout
-    damadgeAmount
-    isActive
+    -position
+    -speed
+    -damadgeAmount
+    -isActive
+
+    +update()
+    -moveTowardsPlayer()
+    -die()
 }
 
 class Bullet_Manager {
-    bullets
+    -MAX_BULLETS
+    -shootDelay
+
+    +spawnBullet()
+    +updateBullets()
+    +removeBullet()
 }
 
   class Bullet {
-    speed
-    position
-    update
-    isActive
+    -position
+    -direction
+    -speed
+    -isActive
+
+    +fire()
+    +update()
+    +checkCollision()
 }
 
   class Level {
-    walls
-    doors
-    collecticles
+    -walls
+    -doors
+    -collectibles
+
+    +loadLevel()
+    +checkCollision()
 }
 
   class Door {
-    position
-    isOpen
-    openSelf
+    -position
+    +isOpen
+
+    +open()
+}
+
+  class Item {
+<<interface>>
+    -position
+    +isActive
+
+    +pickedup()
 }
 
   class Key {
-    position
-    spawn
-    isActive
+    -position
+    -isActive
+
+    +spawn()
+    +pickedup()
+}
+
+class Collectible {
+    -position
+    -isActive
+
+    +pickedup()
 }
 
 
 
-Window-->Game
 
-Game-->Level
-Game-->Player
-Game-->Enemy
+Window --> Game
 
-Collectible-->Player
+Game *-- Level
+Game *-- Player
+Game o-- Enemy
+Game *-- Bullet_Manager
 
-Player-->Level
-Player-->Key
-Player-->Door
-Player-->Collectible
-Player-->Cards
+Player --> Level
+Player --> Door : unlocks
+Player --> Item : picks up
+Player ..> Cards : uses
 
-Enemy-->Level
-Enemy-->Player
-Enemy-->Key
+Enemy --> Level
+Enemy --> Player : damages
+Enemy ..> Key : drop chance
 
-Bullet-->Bullet_Manager
+Bullet_Manager *-- Bullet
 
-Bullet_Manager-->Level
-Bullet_Manager-->Enemy
+Bullet --> Enemy
+Bullet --> Level
 
-Level-->Collectible
-Level-->Door
+Level *-- Door
+Level o-- Item
 
-Key-->Player
+Item <|-- Key
+Item <|-- Collectible
 ```
