@@ -7,7 +7,7 @@ class Door
 public:
 	void open();					//become opened
 									
-	bool isOpen;
+	bool m_isOpen{ false };
 
 private:
 	sf::Vector2f m_position{ 0.0f, 0.0f };

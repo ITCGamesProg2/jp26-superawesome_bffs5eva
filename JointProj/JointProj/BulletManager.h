@@ -8,8 +8,8 @@ public:
 	void removeBullet();			//removes a bullet
 									
 private:
-	const static int MAX_BULLETS{ 10 };
+	const static int m_MAX_BULLETS{ 10 };
 
-	const static int COOLDOWN_LENGTH{ 300 };
-	float shootingCooldown{ COOLDOWN_LENGTH };
+	const static int m_COOLDOWN_LENGTH{ 300 };
+	float m_shootingCooldown{ m_COOLDOWN_LENGTH };
 };

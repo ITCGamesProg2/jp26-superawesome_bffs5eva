@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "BulletManager.h"
+#include "Cards.h"
 
 class Player
 {
@@ -18,16 +19,18 @@ private:
 	void useCollectible();			//uses a collectible - caculates heal amount
 	void heal(int t_amount);		//highens health
 
-	sf::Vector2f position{ 0.0f, 0.0f };
+	sf::Vector2f m_position{ 0.0f, 0.0f };
 	sf::Angle m_rotation{ sf::degrees(0.0) };
 	sf::Vector2f m_velocity;
-	const static int MAX_SPEED{ 50 };
+	const static int m_MAX_SPEED{ 50 };
 
-	const static int MAX_HEALTH{ 100 };
-	int health{ MAX_HEALTH };
+	const static int m_MAX_HEALTH{ 100 };
+	int m_health{ m_MAX_HEALTH };
 
-	BulletManager bulletManager;
+	BulletManager m_bulletManager;
 
-	int collectibleCount{ 0 };
-	int keyCount{ 0 };
+	Cards m_cardHand;
+
+	int m_collectibleCount{ 0 };
+	int m_keyCount{ 0 };
 };
