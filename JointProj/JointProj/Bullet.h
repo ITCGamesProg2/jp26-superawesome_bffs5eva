@@ -5,7 +5,7 @@
 class Bullet
 {
 public:
-	void init();					//called when bullet is fired
+	void init();					//called to fire bullet
 	void update();					//updates position
 	void checkCollision();			//with walls and enemy
 									

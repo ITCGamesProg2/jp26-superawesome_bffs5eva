@@ -10,9 +10,9 @@
 class Level
 {
 public:
-	void loadLevel();
-	void checkCollision();
-
+	void loadLevel();				//sets up level
+	void checkCollision();			//checks collisions to world
+									
 private:
 	std::vector<sf::Sprite> m_walls;
 	std::vector<Door> m_doors;
