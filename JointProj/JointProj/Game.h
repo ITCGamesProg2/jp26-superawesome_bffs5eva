@@ -10,6 +10,7 @@
 #include <SFML/Audio.hpp>
 
 #include "Window.h"
+#include "Level.h"
 
 class Game
 {
@@ -43,6 +44,8 @@ private:
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound
 	sf::Sound m_DELETEsound{ m_DELETEsoundBuffer }; // sound object to play
 	bool m_DELETEexitGame; // control exiting game
+
+	Level m_world;
 };
 
 #pragma warning( pop ) 

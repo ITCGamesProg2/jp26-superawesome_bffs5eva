@@ -81,6 +81,8 @@ void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 	
+	m_world.draw(m_window);
+
 	m_window.display();
 }
 
