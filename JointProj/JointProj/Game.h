@@ -29,11 +29,11 @@ private:
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
 	void checkKeyboardState();
+									
+	void spawnEnemy();				//spawns in an enemy
+	void checkCollision();			//runs all collision checks
 
-	void spawnEnemy();
-	void checkCollision();
-
-	void gameOver();
+	void gameOver();				//deals with when game finishes
 
 	Window m_windowClass;
 	sf::RenderWindow m_window; // main SFML window

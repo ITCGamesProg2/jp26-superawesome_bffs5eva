@@ -4,6 +4,5 @@
 
 class Collectible : Item
 {
-	void pickup() override;			//called when picked up
-									
+	void pickup() override;			//become picked up
 };

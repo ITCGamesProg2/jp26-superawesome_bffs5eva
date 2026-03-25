@@ -5,8 +5,8 @@
 class Window
 {
 public:
-	void render();
-
+	void render();						//renders game
+										
 private:
 	const static int s_screenWidth{ 800 };
 	const static int s_screenHeight{ 600 };

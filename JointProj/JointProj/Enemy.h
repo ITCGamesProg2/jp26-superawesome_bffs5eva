@@ -5,8 +5,8 @@
 class Enemy
 {
 public:
-	void init();					//called when enemy spawns
-	void update();					//update
+	void init();					//called to spawns enenmy
+	void update();					//updates the enemy
 									
 private:
 	void moveTowardsPlayer();		//moves towards player position
