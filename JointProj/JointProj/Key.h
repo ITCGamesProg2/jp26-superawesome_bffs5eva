@@ -4,6 +4,6 @@
 
 class Key : Item
 {
-	void init();
-	void pickup() override;
+	void init();					//called to spawn key
+	void pickup() override;			//become picked up
 };
