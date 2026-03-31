@@ -10,6 +10,9 @@
 #include <SFML/Audio.hpp>
 
 #include "Window.h"
+#include "Level.h"
+
+#include "Player.h"
 
 class Game
 {
@@ -24,8 +27,6 @@ private:
 	void setupAudio();
 
 	void update(sf::Time t_deltaTime);
-	void render();
-
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
 	void checkKeyboardState();
@@ -35,8 +36,10 @@ private:
 
 	void gameOver();				//deals with when game finishes
 
-	Window m_windowClass;
-	sf::RenderWindow m_window; // main SFML window
+	Window m_window;
+	Level m_level;
+
+	Player m_player;
 
 	sf::Font m_jerseyFont;// font used by message
 	
