@@ -1,11 +1,13 @@
 #include "Game.h"
 #include <iostream>
 
-Game::Game() : m_window{ sf::VideoMode{ sf::Vector2u{800U, 600U}, 32U }, "SFML Game 3.0" }, m_DELETEexitGame{false} //when true game will exit
+Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
 	setupAudio(); // load sounds
+
+	m_level.loadLevel();
 }
 
 Game::~Game()
@@ -30,7 +32,7 @@ void Game::run()
 			update(timePerFrame); //60 fps
 		}
 
-		render(); // as many as possible
+		m_window.render(m_player, m_level); // as many as possible
 	}
 }
 
@@ -75,13 +77,8 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		m_window.close();
 	}
-}
 
-void Game::render()
-{
-	m_window.clear(sf::Color::Black);
-	
-	m_window.display();
+	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
 }
 
 void Game::setupTexts()
