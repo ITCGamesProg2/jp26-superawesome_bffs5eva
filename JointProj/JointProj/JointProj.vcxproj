@@ -19,47 +19,47 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="BulletManager.cpp" />
-    <ClCompile Include="Cards.cpp" />
-    <ClCompile Include="Collectible.cpp" />
-    <ClCompile Include="Door.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Item.cpp" />
-    <ClCompile Include="Key.cpp" />
-    <ClCompile Include="Level.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClInclude Include="include\AssetManager.h" />
+    <ClInclude Include="include\Bullet.h" />
+    <ClInclude Include="include\BulletManager.h" />
+    <ClInclude Include="include\Cards.h" />
+    <ClInclude Include="include\Collectible.h" />
+    <ClInclude Include="include\Door.h" />
+    <ClInclude Include="include\Enemy.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Item.h" />
+    <ClInclude Include="include\Key.h" />
+    <ClInclude Include="include\Level.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="BulletManager.h" />
-    <ClInclude Include="Cards.h" />
-    <ClInclude Include="Collectible.h" />
-    <ClInclude Include="Door.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Item.h" />
-    <ClInclude Include="Key.h" />
-    <ClInclude Include="Level.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Window.h" />
+    <ClCompile Include="src\AssetManager.cpp" />
+    <ClCompile Include="src\Bullet.cpp" />
+    <ClCompile Include="src\BulletManager.cpp" />
+    <ClCompile Include="src\Cards.cpp" />
+    <ClCompile Include="src\Collectible.cpp" />
+    <ClCompile Include="src\Door.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Item.cpp" />
+    <ClCompile Include="src\Key.cpp" />
+    <ClCompile Include="src\Level.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="ASSETS\IMAGES\SFML-LOGO.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-    </Image>
+    <Font Include="Resources\ASSETS\FONTS\Jersey20-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="ASSETS\FONTS\Jersey20-Regular.ttf" />
+    <Media Include="Resources\ASSETS\AUDIO\beep.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="ASSETS\AUDIO\beep.wav" />
+    <Image Include="Resources\ASSETS\IMAGES\SFML-LOGO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LevelData\level1.yaml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
