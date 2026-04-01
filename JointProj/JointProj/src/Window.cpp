@@ -37,7 +37,7 @@ void Window::render(const Player& t_player, const Level& t_level)
 			int testX = (int)(pos.x + eyeX * distanceToWall);
 			int testY = (int)(pos.y + eyeY * distanceToWall);
 
-			if (t_level.getTile(testX, testY) == 1)
+			if (t_level.getTileType(testX, testY) == 1)
 			{
 				hitWall = true;
 			}

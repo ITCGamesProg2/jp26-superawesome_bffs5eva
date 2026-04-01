@@ -38,10 +38,10 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	sf::Vector2f newPosX = { newPos.x, m_position.y };
 	sf::Vector2f newPosY = { m_position.x, newPos.y };
 
-	if (t_level.getTile((int)newPosX.x, (int)newPosX.y) == 0) m_position.x = newPosX.x; 
+	if (t_level.getTileType((int)newPosX.x, (int)newPosX.y) == 0) m_position.x = newPosX.x; 
 	else m_velocity.x = 0.0f; 
 
-	if (t_level.getTile((int)newPosY.x, (int)newPosY.y) == 0) m_position.y = newPosY.y; 
+	if (t_level.getTileType((int)newPosY.x, (int)newPosY.y) == 0) m_position.y = newPosY.y;
 	else m_velocity.y = 0.0f; 
 
 	//rotating

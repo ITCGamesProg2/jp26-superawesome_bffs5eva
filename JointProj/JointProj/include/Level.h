@@ -27,7 +27,7 @@ class Level
 {
 public:
     Level() = default;
-    void loadLevel(int t_levelNr, LevelData& t_level);
+    void loadLevel(int t_levelNr);
 
     void checkCollision();
     int getTileType(int t_x, int t_y) const;
