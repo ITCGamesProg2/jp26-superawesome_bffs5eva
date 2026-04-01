@@ -10,21 +10,29 @@ void operator >> (const YAML::Node& t_levelNode, LevelData& t_level)
 	t_level.m_width = t_levelNode["width"].as<int>();
 	t_level.m_height = t_levelNode["height"].as<int>();
 
-	const YAML::Node& mapNode = t_levelNode["map"].as<YAML::Node>();
-	for (unsigned i = 0; i < mapNode.size(); ++i)
+	const YAML::Node& mapNode = t_levelNode["map"];
+	for (int y = 0; y < t_level.m_height; ++y)
 	{
-		tileData tile;
-		mapNode[i] >> tile;
-		t_level.m_tiles.push_back(tile);
+		for (int x = 0; x < t_level.m_width; ++x)
+		{
+			tileData tile;
+			tile.m_type = mapNode[y][x].as<int>();
+			t_level.m_tiles.push_back(tile);
+		}
 	}
 
-	if (t_level.m_tiles.size() != t_level.m_width * t_level.m_height)
+	if (mapNode.size() != t_level.m_height)
 	{
-		throw std::runtime_error("Map size does not match width * height");
+		throw std::runtime_error("Incorrect number of rows in map");
+	}
+
+	if (mapNode[0].size() != t_level.m_width)
+	{
+		throw std::runtime_error("Incorrect row width in map");
 	}
 }
 
-void Level::loadLevel(int t_levelNr, LevelData& t_level)
+void Level::loadLevel(int t_levelNr)
 {
 	std::string filename = "./resources/levelData/level" + std::to_string(t_levelNr) + ".yaml";
 	YAML::Node baseNode = YAML::LoadFile(filename);

@@ -6,7 +6,7 @@ Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
 	setupSprites(); // load texture
 	setupAudio(); // load sounds
 
-	m_level.loadLevel();
+	m_level.loadLevel(1);
 }
 
 Game::~Game()
