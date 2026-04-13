@@ -20,18 +20,31 @@ void Window::render(const Player& t_player, const Level& t_level)
 	auto pos = t_player.getPosition();
 	float angle = t_player.getAngle();
 
+	float rayAngle = 0.0f;
+
+	float distanceToWall = 0.0f;
+	bool hitWall = false;
+
+	float eyeX = 0.0f;
+	float eyeY = 0.0f;
+
+	int testX = 0;
+	int testY = 0;
+
+	int ceiling = 0;
+	int floor = 0;
+
+	int shade = 0;
+
 	for (int x = 0; x < screenWidth; x++)
 	{
-		float rayAngle = (angle - m_FOV / 2.0f) + ((float)x / screenWidth) * m_FOV;
+		rayAngle = (angle - m_FOV / 2.0f) + ((float)x / screenWidth) * m_FOV;
 
-		float distanceToWall = 0.0f;
-		bool hitWall = false;
+		distanceToWall = 0.0f;
+		hitWall = false;
 
-		float eyeX = cos(rayAngle);
-		float eyeY = sin(rayAngle);
-
-		int testX = 0;
-		int testY = 0;
+		eyeX = cos(rayAngle);
+		eyeY = sin(rayAngle);
 
 		while (!hitWall && distanceToWall < m_maxDepth)
 		{
@@ -48,10 +61,10 @@ void Window::render(const Player& t_player, const Level& t_level)
 
 		distanceToWall *= cos(rayAngle - angle);
 
-		int ceiling = (screenHeight / 2.0) - screenHeight / distanceToWall;
-		int floor = screenHeight - ceiling;
+		ceiling = (screenHeight / 2.0) - screenHeight / distanceToWall;
+		floor = screenHeight - ceiling;
 
-		int shade = 255 - (distanceToWall * 20);
+		shade = 255 - (distanceToWall * 20);
 		shade = std::max(0, shade);
 
 		sf::RectangleShape wall;
@@ -62,16 +75,18 @@ void Window::render(const Player& t_player, const Level& t_level)
 		m_window.draw(wall);
 	}
 
-	renderMiniMap(t_level);
+	renderMiniMap(t_player, t_level);
 
 	m_window.display();
 }
 
-void Window::renderMiniMap(const Level& t_level)
+void Window::renderMiniMap(const Player& t_player, const Level& t_level)
 {
+	auto pos = t_player.getPosition();
+
 	sf::RectangleShape tempRect;
 	tempRect.setSize(sf::Vector2f{ 5, 5 });
-	tempRect.setFillColor(sf::Color::Blue);
+	tempRect.setFillColor(sf::Color::Red);
 
 	for (int col = 0; col < t_level.getHeight(); col++)
 	{
@@ -81,6 +96,13 @@ void Window::renderMiniMap(const Level& t_level)
 			{
 				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
 				m_window.draw(tempRect);
+			}
+			else if (row == static_cast<int>(pos.x) && col == static_cast<int>(pos.y)) //draw player location in minimap
+			{
+				tempRect.setFillColor(sf::Color::Cyan);
+				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				m_window.draw(tempRect);
+				tempRect.setFillColor(sf::Color::Red);
 			}
 		}
 	}
