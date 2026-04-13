@@ -40,7 +40,7 @@ void Window::render(const Player& t_player, const Level& t_level)
 			testX = (int)(pos.x + eyeX * distanceToWall);
 			testY = (int)(pos.y + eyeY * distanceToWall);
 
-			if (t_level.getTileType(testX, testY) == 1)
+			if (t_level.getTileType(testX, testY) != 0)
 			{
 				hitWall = true;
 			}
@@ -57,7 +57,14 @@ void Window::render(const Player& t_player, const Level& t_level)
 		sf::RectangleShape wall;
 		wall.setSize({ 1, (float)(floor - ceiling) });
 		wall.setPosition({ (float)x, (float)ceiling });
-		wall.setFillColor(sf::Color(shade, shade, shade));
+		if (t_level.getTileType(testX, testY) == 2)
+		{
+			wall.setFillColor(sf::Color(255 - shade, 61 - shade, 61 - shade));
+		}
+		else
+		{
+			wall.setFillColor(sf::Color(shade, shade, shade));
+		}
 
 		m_window.draw(wall);
 	}
