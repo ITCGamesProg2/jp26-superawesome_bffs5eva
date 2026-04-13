@@ -32,6 +32,9 @@ public:
     void checkCollision();
     int getTileType(int t_x, int t_y) const;
 
+    int getWidth() const;
+    int getHeight() const;
+
 private:
     LevelData m_level;
 };

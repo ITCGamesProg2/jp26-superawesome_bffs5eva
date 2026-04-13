@@ -39,8 +39,22 @@ void Level::loadLevel(int t_levelNr)
 	baseNode >> m_level;
 }
 
+void Level::checkCollision()
+{
+}
+
 int Level::getTileType(int t_x, int t_y) const
 {
 	if (t_x < 0 || t_x >= m_level.m_width || t_y < 0 || t_y >= m_level.m_height) return 1;
 	return m_level.m_tiles[t_y * m_level.m_width + t_x].m_type;
+}
+
+int Level::getWidth() const
+{ 
+	return m_level.m_width; 
+}
+
+int Level::getHeight() const
+{ 
+	return m_level.m_height; 
 }

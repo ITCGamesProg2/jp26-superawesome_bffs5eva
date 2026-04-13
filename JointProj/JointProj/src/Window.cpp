@@ -30,12 +30,15 @@ void Window::render(const Player& t_player, const Level& t_level)
 		float eyeX = cos(rayAngle);
 		float eyeY = sin(rayAngle);
 
+		int testX = 0;
+		int testY = 0;
+
 		while (!hitWall && distanceToWall < m_maxDepth)
 		{
 			distanceToWall += 0.05f;
 
-			int testX = (int)(pos.x + eyeX * distanceToWall);
-			int testY = (int)(pos.y + eyeY * distanceToWall);
+			testX = (int)(pos.x + eyeX * distanceToWall);
+			testY = (int)(pos.y + eyeY * distanceToWall);
 
 			if (t_level.getTileType(testX, testY) == 1)
 			{
@@ -59,7 +62,28 @@ void Window::render(const Player& t_player, const Level& t_level)
 		m_window.draw(wall);
 	}
 
+	renderMiniMap(t_level);
+
 	m_window.display();
+}
+
+void Window::renderMiniMap(const Level& t_level)
+{
+	sf::RectangleShape tempRect;
+	tempRect.setSize(sf::Vector2f{ 5, 5 });
+	tempRect.setFillColor(sf::Color::Blue);
+
+	for (int col = 0; col < t_level.getHeight(); col++)
+	{
+		for (int row = 0; row < t_level.getWidth(); row++)
+		{
+			if (t_level.getTileType(row, col) == 1)
+			{
+				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				m_window.draw(tempRect);
+			}
+		}
+	}
 }
 
 bool Window::isOpen() const
