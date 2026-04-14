@@ -58,3 +58,8 @@ int Level::getHeight() const
 { 
 	return m_level.m_height; 
 }
+
+bool Level::open() const
+{
+	return m_door.draw();
+}

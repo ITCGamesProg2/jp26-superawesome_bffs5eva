@@ -55,18 +55,23 @@ void Window::render(const Player& t_player, const Level& t_level)
 		shade = std::max(0, shade);
 
 		sf::RectangleShape wall;
-		wall.setSize({ 1, (float)(floor - ceiling) });
-		wall.setPosition({ (float)x, (float)ceiling });
 		if (t_level.getTileType(testX, testY) == 2)
 		{
-			wall.setFillColor(sf::Color(255 - shade, 61 - shade, 61 - shade));
+			if (t_level.open())
+			{
+				wall.setSize({ 1, (float)(floor - ceiling) });
+				wall.setPosition({ (float)x, (float)ceiling });
+				wall.setFillColor(sf::Color(5 + shade, 0, 0));
+				m_window.draw(wall);
+			}
 		}
 		else
 		{
+			wall.setSize({ 1, (float)(floor - ceiling) });
+			wall.setPosition({ (float)x, (float)ceiling });
 			wall.setFillColor(sf::Color(shade, shade, shade));
+			m_window.draw(wall);
 		}
-
-		m_window.draw(wall);
 	}
 
 	renderMiniMap(t_level);
@@ -78,7 +83,6 @@ void Window::renderMiniMap(const Level& t_level)
 {
 	sf::RectangleShape tempRect;
 	tempRect.setSize(sf::Vector2f{ 5, 5 });
-	tempRect.setFillColor(sf::Color::Blue);
 
 	for (int col = 0; col < t_level.getHeight(); col++)
 	{
@@ -87,6 +91,13 @@ void Window::renderMiniMap(const Level& t_level)
 			if (t_level.getTileType(row, col) == 1)
 			{
 				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				tempRect.setFillColor(sf::Color::Blue);
+				m_window.draw(tempRect);
+			}
+			else if(t_level.getTileType(row, col) == 2)
+			{
+				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				tempRect.setFillColor(sf::Color::Yellow);
 				m_window.draw(tempRect);
 			}
 		}

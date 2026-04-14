@@ -35,6 +35,9 @@ public:
     int getWidth() const;
     int getHeight() const;
 
+    bool open() const;
+
 private:
+    Door m_door;
     LevelData m_level;
 };

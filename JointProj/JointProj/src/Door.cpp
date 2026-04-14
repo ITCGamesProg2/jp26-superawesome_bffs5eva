@@ -2,5 +2,10 @@
 
 void Door::open()
 {
-	isOpen = false;
+	doorOpen = !doorOpen;
+}
+
+bool Door::draw() const
+{
+	return doorOpen;
 }
