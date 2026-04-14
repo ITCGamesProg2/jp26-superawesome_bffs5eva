@@ -5,14 +5,18 @@
 #include <exception>
 
 #include <vector>
+#include <queue>
 #include <string>
 
 #include "Door.h"
 #include "Collectible.h"
 
+const static int MAX_NEIGHBOORS = 8;
+
 struct tileData
 {
     int m_type;
+    std::vector<int> m_neighboorsTypes;
 };
 
 struct LevelData
@@ -28,6 +32,8 @@ class Level
 public:
     Level() = default;
     void loadLevel(int t_levelNr);
+
+    std::vector<int> breadthFirstSearch(int t_startCell, int t_endCell);
 
     void checkCollision();
     int getTileType(int t_x, int t_y) const;

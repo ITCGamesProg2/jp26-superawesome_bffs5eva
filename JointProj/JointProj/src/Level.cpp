@@ -18,6 +18,86 @@ void operator >> (const YAML::Node& t_levelNode, LevelData& t_level)
 			tileData tile;
 			tile.m_type = mapNode[y][x].as<int>();
 			t_level.m_tiles.push_back(tile);
+
+			//manually assign tile neighboors - temp
+			//on top
+			if (y != 0)
+			{
+				if (x != 0)
+				{
+					tile.m_neighboorsTypes.push_back(mapNode[y - 1][x - 1].as<int>());
+				}
+				else
+				{
+					tile.m_neighboorsTypes.push_back(0);
+				}
+
+				tile.m_neighboorsTypes.push_back(mapNode[y - 1][x].as<int>());
+				
+				if (x != (t_level.m_width - 1))
+				{
+					tile.m_neighboorsTypes.push_back(mapNode[y - 1][x + 1].as<int>());
+				}
+				else
+				{
+					tile.m_neighboorsTypes.push_back(0);
+				}
+			}
+			else
+			{
+				tile.m_neighboorsTypes.push_back(0);
+				tile.m_neighboorsTypes.push_back(0);
+				tile.m_neighboorsTypes.push_back(0);
+			}
+
+			//left and right
+			if (x != 0)
+			{
+				tile.m_neighboorsTypes.push_back(mapNode[y][x - 1].as<int>());
+			}
+			else
+			{
+				tile.m_neighboorsTypes.push_back(0);
+			}
+
+			if (x != (t_level.m_width - 1))
+			{
+				tile.m_neighboorsTypes.push_back(mapNode[y][x + 1].as<int>());
+			}
+			else
+			{
+				tile.m_neighboorsTypes.push_back(0);
+			}
+
+			//below
+			if (y != (t_level.m_height - 1))
+			{
+				if (x != 0)
+				{
+					tile.m_neighboorsTypes.push_back(mapNode[y + 1][x - 1].as<int>());
+				}
+				else
+				{
+					tile.m_neighboorsTypes.push_back(0);
+				}
+
+				tile.m_neighboorsTypes.push_back(mapNode[y + 1][x].as<int>());
+
+				if (x != (t_level.m_width - 1))
+				{
+					tile.m_neighboorsTypes.push_back(mapNode[y + 1][x + 1].as<int>());
+				}
+				else
+				{
+					tile.m_neighboorsTypes.push_back(0);
+				}
+			}
+			else
+			{
+				tile.m_neighboorsTypes.push_back(0);
+				tile.m_neighboorsTypes.push_back(0);
+				tile.m_neighboorsTypes.push_back(0);
+			}
 		}
 	}
 
@@ -37,6 +117,47 @@ void Level::loadLevel(int t_levelNr)
 	std::string filename = "./resources/levelData/level" + std::to_string(t_levelNr) + ".yaml";
 	YAML::Node baseNode = YAML::LoadFile(filename);
 	baseNode >> m_level;
+}
+
+std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
+{
+	//if (t_endCell != 0) //not a valid cell - improve check later
+	//{
+	//	return std::vector<int>();
+	//}
+
+	//make queue
+	std::queue<std::pair<tileData, bool>> queue;
+
+	//label t_startCell as explored
+	//push t_startCell
+	tileData startCell;
+	queue.push(std::pair{ startCell, true });
+
+	////while queue is not empty
+	//while (!queue.empty())
+	//{
+	//	//for each queue front
+	//	for ()
+	//	{
+	//		//if queue front = t_endCell
+	//		if()
+	//		{
+	//			//return queue
+	//		}
+	//		//else
+	//		else
+	//		{
+	//			//queue front = 
+	//			//label cell as explored
+	//			//push
+	//		}
+	//	}
+
+	//	//pop
+	//}
+
+	return std::vector<int>();
 }
 
 void Level::checkCollision()
