@@ -17,7 +17,7 @@ const static int MAX_NEIGHBOORS = 8;
 struct tileData
 {
     int m_type;
-    std::vector<int> m_neighboorsTypes;
+    std::vector<int> m_neighboors;
 };
 
 struct LevelData
