@@ -7,6 +7,7 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <iostream>
 
 #include "Door.h"
 #include "Collectible.h"
@@ -32,6 +33,7 @@ class Level
 public:
     Level() = default;
     void loadLevel(int t_levelNr);
+    void loadTileNeighboors(int t_index, int t_row, int t_col);
 
     std::vector<int> breadthFirstSearch(int t_startCell, int t_endCell);
 

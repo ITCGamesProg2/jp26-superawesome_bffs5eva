@@ -18,86 +18,6 @@ void operator >> (const YAML::Node& t_levelNode, LevelData& t_level)
 			tileData tile;
 			tile.m_type = mapNode[y][x].as<int>();
 			t_level.m_tiles.push_back(tile);
-
-			//manually assign tile neighboors - temp
-			//on top
-			if (y != 0)
-			{
-				if (x != 0)
-				{
-					tile.m_neighboorsTypes.push_back(mapNode[y - 1][x - 1].as<int>());
-				}
-				else
-				{
-					tile.m_neighboorsTypes.push_back(0);
-				}
-
-				tile.m_neighboorsTypes.push_back(mapNode[y - 1][x].as<int>());
-				
-				if (x != (t_level.m_width - 1))
-				{
-					tile.m_neighboorsTypes.push_back(mapNode[y - 1][x + 1].as<int>());
-				}
-				else
-				{
-					tile.m_neighboorsTypes.push_back(0);
-				}
-			}
-			else
-			{
-				tile.m_neighboorsTypes.push_back(0);
-				tile.m_neighboorsTypes.push_back(0);
-				tile.m_neighboorsTypes.push_back(0);
-			}
-
-			//left and right
-			if (x != 0)
-			{
-				tile.m_neighboorsTypes.push_back(mapNode[y][x - 1].as<int>());
-			}
-			else
-			{
-				tile.m_neighboorsTypes.push_back(0);
-			}
-
-			if (x != (t_level.m_width - 1))
-			{
-				tile.m_neighboorsTypes.push_back(mapNode[y][x + 1].as<int>());
-			}
-			else
-			{
-				tile.m_neighboorsTypes.push_back(0);
-			}
-
-			//below
-			if (y != (t_level.m_height - 1))
-			{
-				if (x != 0)
-				{
-					tile.m_neighboorsTypes.push_back(mapNode[y + 1][x - 1].as<int>());
-				}
-				else
-				{
-					tile.m_neighboorsTypes.push_back(0);
-				}
-
-				tile.m_neighboorsTypes.push_back(mapNode[y + 1][x].as<int>());
-
-				if (x != (t_level.m_width - 1))
-				{
-					tile.m_neighboorsTypes.push_back(mapNode[y + 1][x + 1].as<int>());
-				}
-				else
-				{
-					tile.m_neighboorsTypes.push_back(0);
-				}
-			}
-			else
-			{
-				tile.m_neighboorsTypes.push_back(0);
-				tile.m_neighboorsTypes.push_back(0);
-				tile.m_neighboorsTypes.push_back(0);
-			}
 		}
 	}
 
@@ -117,6 +37,43 @@ void Level::loadLevel(int t_levelNr)
 	std::string filename = "./resources/levelData/level" + std::to_string(t_levelNr) + ".yaml";
 	YAML::Node baseNode = YAML::LoadFile(filename);
 	baseNode >> m_level;
+
+	for (int i = 0; i < m_level.m_tiles.size(); i++)
+	{
+		loadTileNeighboors(i, i / m_level.m_width, i % m_level.m_width);
+	}
+}
+
+void Level::loadTileNeighboors(int t_index, int t_row, int t_col)
+{
+	int tile = (t_row * m_level.m_width) + t_col;
+	int rowOffset[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+	int colOffset[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+
+	int newRow = 0;
+	int newCol = 0;
+	int newTile = 0;
+
+	//std::cout << "Tile (" << t_row << ", " << t_col << ") of type :" << m_level.m_tiles.at(tile).m_type << ", has neighboors types :" << "\n";
+
+	for (int i = 0; i < MAX_NEIGHBOORS; i++)
+	{
+		newRow = t_row + rowOffset[i];
+		newCol = t_col + colOffset[i];
+
+		newTile = (newRow * m_level.m_width) + newCol;
+
+		if (newRow >= 0 && newRow < m_level.m_height && newCol >= 0 && newCol < m_level.m_width) 
+		{
+			m_level.m_tiles.at(t_index).m_neighboorsTypes.push_back(m_level.m_tiles.at(newTile).m_type);
+			//std::cout << "Neighbor at (" << newRow << ", " << newCol << "): " << m_level.m_tiles.at(newTile).m_type << "\n";
+		}
+	}
+
+	/*for (int i = 0; i < m_level.m_tiles.at(t_index).m_neighboorsTypes.size(); i++)
+	{
+		std::cout << m_level.m_tiles.at(t_index).m_neighboorsTypes.at(i) << "\n";
+	}*/
 }
 
 std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
