@@ -42,7 +42,17 @@ void Window::render(const Player& t_player, const Level& t_level)
 
 			if (t_level.getTileType(testX, testY) != 0)
 			{
-				hitWall = true;
+				if (t_level.getTileType(testX, testY) == 2)
+				{
+					if (t_level.open())
+					{
+						hitWall = false;
+					}
+				}
+				else
+				{
+					hitWall = true;
+				}
 			}
 		}
 
@@ -57,11 +67,11 @@ void Window::render(const Player& t_player, const Level& t_level)
 		sf::RectangleShape wall;
 		if (t_level.getTileType(testX, testY) == 2)
 		{
-			if (t_level.open())
+			if (!t_level.open())
 			{
 				wall.setSize({ 1, (float)(floor - ceiling) });
 				wall.setPosition({ (float)x, (float)ceiling });
-				wall.setFillColor(sf::Color(5 + shade, 0, 0));
+				wall.setFillColor(sf::Color(5 + shade, shade, shade));
 				m_window.draw(wall);
 			}
 		}

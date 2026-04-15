@@ -36,6 +36,7 @@ public:
     int getHeight() const;
 
     bool open() const;
+    void toggleDoor();
 
 private:
     Door m_door;

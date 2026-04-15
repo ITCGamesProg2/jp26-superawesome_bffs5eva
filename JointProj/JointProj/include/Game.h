@@ -43,6 +43,9 @@ private:
 
 	Player m_player;
 
+	//bool to stop door opening and closing rappidly
+	bool doorPressed = false;
+
 	sf::Font m_jerseyFont;// font used by message
 	
 	sf::SoundBuffer m_DELETEsoundBuffer; // buffer for beep sound

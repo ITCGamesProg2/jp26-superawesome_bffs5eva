@@ -77,6 +77,16 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
+	if (!doorPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+	{
+		m_level.toggleDoor();
+		doorPressed = true;
+	}
+	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+	{
+		doorPressed = false;
+	}
+
 	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
 }
 

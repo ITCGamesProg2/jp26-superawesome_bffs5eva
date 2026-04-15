@@ -63,3 +63,8 @@ bool Level::open() const
 {
 	return m_door.draw();
 }
+
+void Level::toggleDoor()
+{
+	m_door.open();
+}
