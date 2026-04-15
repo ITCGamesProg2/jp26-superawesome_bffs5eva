@@ -54,26 +54,17 @@ void Level::loadTileNeighboors(int t_index, int t_row, int t_col)
 	int newCol = 0;
 	int newTile = 0;
 
-	//std::cout << "Tile (" << t_row << ", " << t_col << ") of type :" << m_level.m_tiles.at(tile).m_type << ", has neighboors types :" << "\n";
-
 	for (int i = 0; i < MAX_NEIGHBOORS; i++)
 	{
 		newRow = t_row + rowOffset[i];
 		newCol = t_col + colOffset[i];
 
-		newTile = (newRow * m_level.m_width) + newCol;
-
 		if (newRow >= 0 && newRow < m_level.m_height && newCol >= 0 && newCol < m_level.m_width) 
 		{
-			m_level.m_tiles.at(t_index).m_neighboorsTypes.push_back(m_level.m_tiles.at(newTile).m_type);
-			//std::cout << "Neighbor at (" << newRow << ", " << newCol << "): " << m_level.m_tiles.at(newTile).m_type << "\n";
+			newTile = (newRow * m_level.m_width) + newCol;
+			m_level.m_tiles.at(t_index).m_neighboors.push_back(newTile);
 		}
 	}
-
-	/*for (int i = 0; i < m_level.m_tiles.at(t_index).m_neighboorsTypes.size(); i++)
-	{
-		std::cout << m_level.m_tiles.at(t_index).m_neighboorsTypes.at(i) << "\n";
-	}*/
 }
 
 std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
@@ -83,13 +74,13 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 	//	return std::vector<int>();
 	//}
 
-	//make queue
-	std::queue<std::pair<tileData, bool>> queue;
+	////make queue
+	//std::queue<std::pair<tileData, bool>> queue;
 
-	//label t_startCell as explored
-	//push t_startCell
-	tileData startCell;
-	queue.push(std::pair{ startCell, true });
+	////label t_startCell as explored
+	////push t_startCell
+	//tileData startCell;
+	//queue.push(std::pair{ startCell, true });
 
 	////while queue is not empty
 	//while (!queue.empty())
@@ -114,38 +105,37 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 	//	//pop
 	//}
 
-	return std::vector<int>();
+	/*return std::vector<int>();*/
 
-	//example found online - https://www.geeksforgeeks.org/dsa/breadth-first-search-or-bfs-for-a-graph/
-	//// BFS for single connected component
-	//vector<int> bfs(vector<vector<int>>&adj) {
-	//	int V = adj.size();
-	//	vector<bool> visited(V, false);
-	//	vector<int> res;
+	std::vector<bool> visited(m_level.m_tiles.size(), false);
+	std::vector<int> parent(m_level.m_tiles.size(), -1);
+	std::queue<int> queue;
 
-	//	queue<int> q;
+	visited[t_startCell] = true;
+	queue.push(t_startCell);
+	int current;
 
-	//	int src = 0;
-	//	visited[src] = true;
-	//	q.push(src);
+	while (!queue.empty())
+	{
+		current = queue.front();
+		queue.pop();
 
-	//	while (!q.empty()) {
-	//		int curr = q.front();
-	//		q.pop();
-	//		res.push_back(curr);
+		if (current == t_endCell)
+		{
+			break;
+		}
 
-	//		// visit all the unvisited
-	//		// neighbours of current node
-	//		for (int x : adj[curr]) {
-	//			if (!visited[x]) {
-	//				visited[x] = true;
-	//				q.push(x);
-	//			}
-	//		}
-	//	}
+		for (int neighboor : m_level.m_tiles.at(current).m_neighboors)
+		{
+			if (!visited[neighboor])
+			{
+				visited[neighboor] = true;
+				queue.push(neighboor);
+			}
+		}
+	}
 
-	//	return res;
-	//}
+	return path;
 }
 
 void Level::checkCollision()
