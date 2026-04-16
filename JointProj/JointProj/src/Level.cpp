@@ -69,51 +69,22 @@ void Level::loadTileNeighboors(int t_index, int t_row, int t_col)
 
 std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 {
-	//if (t_endCell != 0) //not a valid cell - improve check later
-	//{
-	//	return std::vector<int>();
-	//}
-
-	////make queue
-	//std::queue<std::pair<tileData, bool>> queue;
-
-	////label t_startCell as explored
-	////push t_startCell
-	//tileData startCell;
-	//queue.push(std::pair{ startCell, true });
-
-	////while queue is not empty
-	//while (!queue.empty())
-	//{
-	//	//for each queue front
-	//	for ()
-	//	{
-	//		//if queue front = t_endCell
-	//		if()
-	//		{
-	//			//return queue
-	//		}
-	//		//else
-	//		else
-	//		{
-	//			//queue front = 
-	//			//label cell as explored
-	//			//push
-	//		}
-	//	}
-
-	//	//pop
-	//}
-
-	/*return std::vector<int>();*/
+	if (m_level.m_tiles[t_startCell].m_type != 0 || m_level.m_tiles[t_endCell].m_type != 0)
+	{
+		return {};
+	}
 
 	std::vector<bool> visited(m_level.m_tiles.size(), false);
 	std::vector<int> parent(m_level.m_tiles.size(), -1);
 	std::queue<int> queue;
 
-	visited[t_startCell] = true;
+	visited.at(t_startCell) = true;
 	queue.push(t_startCell);
-	int current;
+	int current, currentRow, currentCol;
+	int neighboorRow, neighboorCol;
+	int dRow, dCol;
+
+	int tile1, tile2;
 
 	while (!queue.empty())
 	{
@@ -127,13 +98,49 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 
 		for (int neighboor : m_level.m_tiles.at(current).m_neighboors)
 		{
-			if (!visited[neighboor])
+			if (visited.at(neighboor) || m_level.m_tiles.at(neighboor).m_type != 0) continue;
+
+			currentRow = current / m_level.m_width;
+			currentCol = current % m_level.m_width;
+
+			neighboorRow = neighboor / m_level.m_width;
+			neighboorCol = neighboor % m_level.m_width;
+
+			dRow = neighboorRow - currentRow;
+			dCol = neighboorCol - currentCol;
+
+			if (abs(dRow) == 1 && abs(dCol) == 1)
 			{
-				visited[neighboor] = true;
-				queue.push(neighboor);
+				tile1 = currentRow * m_level.m_width + (currentCol + dCol); //horizontal
+				tile2 = (currentRow + dRow) * m_level.m_width + currentCol; //vertical
+
+				if (m_level.m_tiles.at(tile1).m_type != 0 || m_level.m_tiles.at(tile2).m_type != 0)
+				{
+					continue;
+				}
 			}
+
+			visited.at(neighboor) = true;
+			parent.at(neighboor) = current;
+			queue.push(neighboor);
 		}
 	}
+
+	std::vector<int> path;
+	current = t_endCell;
+
+	if (!visited.at(current))
+	{
+		return path; //no path found
+	}
+
+	while (current != -1)
+	{
+		path.push_back(current);
+		current = parent.at(current);
+	}
+
+	std::reverse(path.begin(), path.end());
 
 	return path;
 }
