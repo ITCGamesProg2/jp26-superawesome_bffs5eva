@@ -65,23 +65,10 @@ void Window::render(const Player& t_player, const Level& t_level)
 		shade = std::max(0, shade);
 
 		sf::RectangleShape wall;
-		if (t_level.getTileType(testX, testY) == 2)
-		{
-			if (!t_level.open())
-			{
-				wall.setSize({ 1, (float)(floor - ceiling) });
-				wall.setPosition({ (float)x, (float)ceiling });
-				wall.setFillColor(sf::Color(5 + shade, shade, shade));
-				m_window.draw(wall);
-			}
-		}
-		else
-		{
-			wall.setSize({ 1, (float)(floor - ceiling) });
-			wall.setPosition({ (float)x, (float)ceiling });
-			wall.setFillColor(sf::Color(shade, shade, shade));
-			m_window.draw(wall);
-		}
+		wall.setSize({ 1, (float)(floor - ceiling) });
+		wall.setPosition({ (float)x, (float)ceiling });
+		wall.setFillColor(sf::Color(shade, shade, shade));
+		m_window.draw(wall);
 	}
 
 	renderMiniMap(t_level);
