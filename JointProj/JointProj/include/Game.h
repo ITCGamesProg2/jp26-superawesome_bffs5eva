@@ -15,6 +15,7 @@
 #include "Level.h"
 
 #include "Player.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -42,6 +43,7 @@ private:
 	Level m_level;
 
 	Player m_player;
+	Enemy m_enemy;
 
 	sf::Font m_jerseyFont;// font used by message
 	

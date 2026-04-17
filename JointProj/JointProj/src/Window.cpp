@@ -10,7 +10,7 @@ std::optional<sf::Event> Window::pollEvent()
 	return m_window.pollEvent();
 }
 
-void Window::render(const Player& t_player, const Level& t_level)
+void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t_level)
 {
 	m_window.clear();
 
@@ -75,14 +75,15 @@ void Window::render(const Player& t_player, const Level& t_level)
 		m_window.draw(wall);
 	}
 
-	renderMiniMap(t_player, t_level);
+	renderMiniMap(t_player, t_enemy, t_level);
 
 	m_window.display();
 }
 
-void Window::renderMiniMap(const Player& t_player, const Level& t_level)
+void Window::renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level)
 {
-	auto pos = t_player.getPosition();
+	auto playerPos = t_player.getPosition();
+	auto enemyPos = t_enemy.getPosition();
 
 	sf::RectangleShape tempRect;
 	tempRect.setSize(sf::Vector2f{ 5, 5 });
@@ -94,15 +95,21 @@ void Window::renderMiniMap(const Player& t_player, const Level& t_level)
 		{
 			if (t_level.getTileType(row, col) == 1)
 			{
+				tempRect.setFillColor(sf::Color::Red);
 				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
 				m_window.draw(tempRect);
 			}
-			else if (row == static_cast<int>(pos.x) && col == static_cast<int>(pos.y)) //draw player location in minimap
+			else if (row == static_cast<int>(playerPos.x) && col == static_cast<int>(playerPos.y)) //draw player location in minimap
 			{
 				tempRect.setFillColor(sf::Color::Cyan);
 				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
 				m_window.draw(tempRect);
-				tempRect.setFillColor(sf::Color::Red);
+			}
+			else if (row == static_cast<int>(enemyPos.x) && col == static_cast<int>(enemyPos.y)) //draw player location in minimap
+			{
+				tempRect.setFillColor(sf::Color::Magenta);
+				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				m_window.draw(tempRect);
 			}
 		}
 	}

@@ -4,6 +4,7 @@
 
 #include "Level.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Window
 {
@@ -12,8 +13,8 @@ public:
 
 	std::optional<sf::Event> pollEvent();
 
-	void render(const Player& t_player, const Level& t_level);						//renders game
-	void renderMiniMap(const Player& t_player, const Level& t_level);				//renders MiniMap
+	void render(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
+	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
 	bool isOpen() const;
 	void close();
 										

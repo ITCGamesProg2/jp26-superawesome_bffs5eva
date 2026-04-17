@@ -31,7 +31,7 @@ void Game::run()
 			update(timePerFrame); //60 fps
 		}
 
-		m_window.render(m_player, m_level); // as many as possible
+		m_window.render(m_player, m_enemy, m_level); // as many as possible
 	}
 }
 
@@ -78,6 +78,8 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
+	m_enemy.update(m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()));
+
 }
 
 void Game::setupTexts()

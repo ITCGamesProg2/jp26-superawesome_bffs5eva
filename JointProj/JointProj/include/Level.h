@@ -35,7 +35,8 @@ public:
     void loadLevel(int t_levelNr);
     void loadTileNeighboors(int t_index, int t_row, int t_col);
 
-    std::vector<int> breadthFirstSearch(int t_startCell, int t_endCell);
+    std::vector<int> breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f t_endPos);
+    int asCell(sf::Vector2f t_pos);
 
     void checkCollision();
     int getTileType(int t_x, int t_y) const;

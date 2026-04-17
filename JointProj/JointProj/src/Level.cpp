@@ -67,9 +67,12 @@ void Level::loadTileNeighboors(int t_index, int t_row, int t_col)
 	}
 }
 
-std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
+std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f t_endPos)
 {
-	if (m_level.m_tiles[t_startCell].m_type != 0 || m_level.m_tiles[t_endCell].m_type != 0)
+	int startCell = asCell(t_startPos);
+	int endCell = asCell(t_endPos);
+
+	if (m_level.m_tiles[startCell].m_type != 0 || m_level.m_tiles[endCell].m_type != 0)
 	{
 		return {};
 	}
@@ -78,8 +81,8 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 	std::vector<int> parent(m_level.m_tiles.size(), -1);
 	std::queue<int> queue;
 
-	visited.at(t_startCell) = true;
-	queue.push(t_startCell);
+	visited.at(startCell) = true;
+	queue.push(startCell);
 	int current, currentRow, currentCol;
 	int neighboorRow, neighboorCol;
 	int dRow, dCol;
@@ -91,7 +94,7 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 		current = queue.front();
 		queue.pop();
 
-		if (current == t_endCell)
+		if (current == endCell)
 		{
 			break;
 		}
@@ -127,7 +130,7 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 	}
 
 	std::vector<int> path;
-	current = t_endCell;
+	current = endCell;
 
 	if (!visited.at(current))
 	{
@@ -143,6 +146,11 @@ std::vector<int> Level::breadthFirstSearch(int t_startCell, int t_endCell)
 	std::reverse(path.begin(), path.end());
 
 	return path;
+}
+
+int Level::asCell(sf::Vector2f t_pos)
+{
+	return (t_pos.x * m_level.m_width) + t_pos.y;
 }
 
 void Level::checkCollision()
