@@ -150,7 +150,10 @@ std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f
 
 int Level::asCell(sf::Vector2f t_pos)
 {
-	return (t_pos.y * m_level.m_width) + t_pos.x;
+	int x = std::clamp(static_cast<int>(t_pos.x), 0, m_level.m_width - 1);
+	int y = std::clamp(static_cast<int>(t_pos.y), 0, m_level.m_height - 1);
+
+	return y * m_level.m_width + x;
 }
 
 void Level::checkCollision()

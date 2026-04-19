@@ -93,22 +93,27 @@ void Window::renderMiniMap(const Player& t_player, const Enemy& t_enemy, const L
 	{
 		for (int row = 0; row < t_level.getWidth(); row++)
 		{
+			//draw tiles first
 			if (t_level.getTileType(row, col) == 1)
 			{
 				tempRect.setFillColor(sf::Color::Red);
-				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				tempRect.setPosition({ 20.f + row * 5.f, 20.f + col * 5.f });
 				m_window.draw(tempRect);
 			}
-			else if (row == static_cast<int>(playerPos.x) && col == static_cast<int>(playerPos.y)) //draw player location in minimap
-			{
-				tempRect.setFillColor(sf::Color::Cyan);
-				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
-				m_window.draw(tempRect);
-			}
-			else if (row == static_cast<int>(enemyPos.x) && col == static_cast<int>(enemyPos.y)) //draw player location in minimap
+
+			//draw enemy
+			if (row == (int)enemyPos.x && col == (int)enemyPos.y)
 			{
 				tempRect.setFillColor(sf::Color::Magenta);
-				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
+				tempRect.setPosition({ 20.f + row * 5.f, 20.f + col * 5.f });
+				m_window.draw(tempRect);
+			}
+
+			//draw player
+			if (row == (int)playerPos.x && col == (int)playerPos.y)
+			{
+				tempRect.setFillColor(sf::Color::Cyan);
+				tempRect.setPosition({ 20.f + row * 5.f, 20.f + col * 5.f });
 				m_window.draw(tempRect);
 			}
 		}
