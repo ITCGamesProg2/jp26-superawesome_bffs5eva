@@ -7,6 +7,7 @@ Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
 	setupAudio(); // load sounds
 
 	m_level.loadLevel(1);
+	m_enemy.init(m_level.getWidth(), { 5.5f, 5.5f });
 }
 
 Game::~Game()
@@ -78,8 +79,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
-	m_enemy.update(m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()));
-
+	m_enemy.update( m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()));
 }
 
 void Game::setupTexts()
