@@ -150,7 +150,7 @@ std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f
 
 int Level::asCell(sf::Vector2f t_pos)
 {
-	return (t_pos.x * m_level.m_width) + t_pos.y;
+	return (t_pos.y * m_level.m_width) + t_pos.x;
 }
 
 void Level::checkCollision()
