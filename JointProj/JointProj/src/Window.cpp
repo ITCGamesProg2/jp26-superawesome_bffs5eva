@@ -95,7 +95,10 @@ void Window::renderMiniMap(const Level& t_level)
 			{
 				tempRect.setPosition(sf::Vector2f{ static_cast<float>(20 + (row * 5)), static_cast<float>(20 + (col * 5)) });
 				tempRect.setFillColor(sf::Color::Yellow);
-				m_window.draw(tempRect);
+				if (!t_level.open())
+				{
+					m_window.draw(tempRect);
+				}
 			}
 		}
 	}
