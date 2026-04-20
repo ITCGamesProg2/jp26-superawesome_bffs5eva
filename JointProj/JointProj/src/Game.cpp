@@ -85,6 +85,18 @@ void Game::update(sf::Time t_deltaTime)
 					m_player.getPosition());
 }
 
+void Game::spawnEnemy()
+{
+}
+
+void Game::checkCollision()
+{
+}
+
+void Game::gameOver()
+{
+}
+
 void Game::setupTexts()
 {
 	if (!m_jerseyFont.openFromFile("Resources\\ASSETS\\FONTS\\Jersey20-Regular.ttf"))
@@ -118,5 +130,5 @@ void Game::setupAudio()
 	{
 		std::cout << "Error loading beep sound" << std::endl;
 	}
-	m_DELETEsound.play(); // test sound
+	//m_DELETEsound.play(); // test sound
 }

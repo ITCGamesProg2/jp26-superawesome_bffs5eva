@@ -5,6 +5,7 @@
 #include "Level.h"
 
 #include "BulletManager.h"
+#include "Cards.h"
 
 class Player
 {
@@ -35,11 +36,12 @@ private:
 	float m_angle{ 0.0f };
 	const static int m_ROTATION_SPEED{ 2 };
 
-	const static int MAX_HEALTH{ 100 };
-	int health{ MAX_HEALTH };
+	Cards m_cardHand;
+	const static int m_MAX_HEALTH{ 100 };
+	int m_health{ m_MAX_HEALTH };
 
-	BulletManager bulletManager;
+	BulletManager m_bulletManager;
 
-	int collectibleCount{ 0 };
-	int keyCount{ 0 };
+	int m_collectibleCount{ 0 };
+	int m_keyCount{ 0 };
 };

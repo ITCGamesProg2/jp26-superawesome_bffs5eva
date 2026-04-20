@@ -4,6 +4,6 @@
 
 class Key : Item
 {
-	void init();					//called to spawn key
+	void init(sf::Vector2f t_pos);					//called to spawn key
 	void pickup() override;			//become picked up
 };
