@@ -8,12 +8,13 @@ class Enemy
 {
 public:
 	void init(int t_levelWidth, sf::Vector2f t_pos);					//called to spawns enenmy
-	void update(std::vector<int> t_path);					//updates the enemy
+	void update(float t_dt, const Level& t_level, bool t_sameCell, std::vector<int> t_path, sf::Vector2f t_playerPos);					//updates the enemy
 
 	sf::Vector2f getPosition() const;
 									
 private:
-	void moveTowardsPlayer();		//moves towards player position
+	void railMoveTowards();		//moves towards player position
+	void independantMoveTowards(float t_dt, const Level& t_level, sf::Vector2f t_playerPos);
 	void die();						//despawns/dissactivates enemy
 
 	int m_levelWidth;
