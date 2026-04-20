@@ -5,14 +5,14 @@
 class Bullet
 {
 public:
-	void init();					//called to fire bullet
-	void update();					//updates position
+	void init(sf::Vector2f t_pos, sf::Angle t_rot);					//called to fire bullet
+	void update(float t_dt);					//updates position
 	void checkCollision();			//with walls and enemy
 									
 private:
-	sf::Vector2f position{ 0.0f, 0.0f };
+	sf::Vector2f m_position{ 0.0f, 0.0f };
 	sf::Angle m_rotation{ sf::degrees(0.0) };
-	const static int SPEED{ 100 };
+	const static int m_SPEED{ 100 };
 
-	bool isActive;
+	bool m_isActive;
 };
