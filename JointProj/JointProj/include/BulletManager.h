@@ -1,4 +1,5 @@
 #pragma once
+#include "Bullet.h"
 
 class BulletManager
 {
@@ -9,6 +10,7 @@ public:
 									
 private:
 	const static int MAX_BULLETS{ 10 };
+	Bullet bullets[MAX_BULLETS];
 
 	const static int COOLDOWN_LENGTH{ 300 };
 	float shootingCooldown{ COOLDOWN_LENGTH };

@@ -1,4 +1,5 @@
 #include "../include/Level.h"
+#include "Bullet.h"
 
 void operator >> (const YAML::Node& t_tileNode, tileData& t_tile)
 {
