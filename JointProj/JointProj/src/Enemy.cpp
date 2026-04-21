@@ -1,29 +1,84 @@
 #include "../include/Enemy.h"
 
+Enemy::Enemy()
+{
+	if (!m_texture.loadFromFile("Resources\\ASSETS\\IMAGES\\enemy_spritesheet.png"))
+	{
+		std::cout << "problem loading enemy texture" << std::endl;
+	}
+	
+	m_state = States::Idle;
+	m_sprite.setTexture(m_texture,true);
+	m_sprite.setTextureRect(sf::IntRect({ 0,0 }, { 48, 48 }));
+}
+
 void Enemy::init(int t_levelWidth, sf::Vector2f t_pos)
 {
-	m_isActive = true;
 	m_levelWidth = t_levelWidth;
+	m_isActive = true;
+	m_state = States::Idle;
 	m_position = t_pos;
 	m_velocity = { 0.0f, 0.0f };
 }
 
 void Enemy::update(float t_dt, const Level& t_level, bool t_sameCell, std::vector<int> t_path, sf::Vector2f t_playerPos)
 {
-	std::cout << t_path.size() << std::endl;
+	/*switch (m_state)
+	{
+	case States::Idle:
+	{
+		if ()
+		{
+			m_state = States::Run;
+		}
+		else if (t_sameCell)
+		{
+			m_state = States::Attack;
+		}
+		else if ()
+		{
+			m_state = States::Die;
+		}
 
-	if (!t_path.empty() && (m_path.size() < 2 || m_path.back() != t_path.back()))
-	{
-		m_path = t_path;
+		break;
 	}
+	case States::Run:
+	{*/
+		if (!t_path.empty() && (m_path.size() < 2 || m_path.back() != t_path.back()))
+		{
+			m_path = t_path;
+		}
 
-	if (t_sameCell)
-	{
-		independantMoveTowards(t_dt, t_level, t_playerPos);
-	}
-	else
-	{
 		railMoveTowards();
+
+		if (t_sameCell)
+		{
+	//		m_state = States::Attack;
+	//	}
+
+	//	break;
+	//}
+	//case States::Attack:
+	//{
+		independantMoveTowards(t_dt, t_level, t_playerPos);
+
+	//	if(!t_sameCell)
+	//	{
+	//		m_state = States::Run;
+	//	}
+	//	else if ()
+	//	{
+	//		m_state = States::Die;
+	//	}
+
+	//	break;
+	//}
+	//case States::Die:
+	//{
+	//	m_isActive = false;
+
+	//	break;
+	//}
 	}
 }
 
@@ -93,4 +148,9 @@ void Enemy::die()
 sf::Vector2f Enemy::getPosition() const
 {
 	return m_position;
+}
+
+sf::Sprite Enemy::getSprite() const
+{
+	return m_sprite;
 }
