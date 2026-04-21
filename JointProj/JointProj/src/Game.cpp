@@ -7,7 +7,7 @@ Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
 	setupAudio(); // load sounds
 
 	m_level.loadLevel(1);
-	m_enemy.init(m_level.getWidth(), { 7.0f, 7.0f });
+	m_enemy.init(m_level.getWidth(), { 7.0f, 13.0f });
 }
 
 Game::~Game()

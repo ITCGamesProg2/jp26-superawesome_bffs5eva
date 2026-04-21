@@ -30,4 +30,5 @@ private:
 	float m_FOV{ 3.14159f / 3.0f };
 	float m_maxDepth{ 20.0f };
 	std::vector<float> m_depthBuffer;
+	std::vector<float> m_floorBuffer;
 };
