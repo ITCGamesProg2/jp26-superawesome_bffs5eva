@@ -2,6 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
+//#include <iostream>
+//#include <string>
+
 #include "Level.h"
 
 #include "BulletManager.h"
@@ -25,7 +28,7 @@ private:
 	void useCollectible();			//uses a collectible - caculates heal amount
 	void heal(int t_amount);		//highens health
 
-	sf::Vector2f m_position{ 5.0f, 5.0f };
+	sf::Vector2f m_position{ 1.0f, 1.0f };
 	sf::Vector2f m_forward{ 0.0f, 0.0f };
 	sf::Vector2f m_strafe{ 0.0f, 0.0f };
 

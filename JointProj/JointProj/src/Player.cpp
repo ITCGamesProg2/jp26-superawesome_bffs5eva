@@ -53,6 +53,8 @@ void Player::handleInput(float t_dt, const Level& t_level)
 
 	//heal
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) useCollectible();
+
+	//std::cout << "X :" << std::to_string(m_position.x) << " Y :"  << std::to_string(m_position.y) << "\n";
 }
 
 void Player::takeDamadge(int t_amount)

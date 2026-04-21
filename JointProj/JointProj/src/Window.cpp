@@ -68,8 +68,12 @@ void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
 	float texXRatio = 0.0f;
 	int texX = 0;
 
-	float floor = 0.0f;
-	float ceiling = 0.0f;
+	float wallHeight = 0.0f;
+	float wallCeiling = 0.0f;
+	float wallFloor = 0.0f;
+
+	float visualOffset = 0.0f;
+	float spriteTop = 0.0f;
 
 	for (int x = drawStartX; x < drawEndX; x++) //each vertical slice of the sprite
 	{
@@ -84,12 +88,22 @@ void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
 		slice.setScale({ 1.0f, spriteHeight / 48.0f });
 
 		//feet on floor
-		floor = screenHeight / 2.0f + screenHeight / distance;
-		ceiling = floor - spriteHeight;
+		spriteHeight = screenHeight / distance;
 
-		slice.setPosition({ (float)x, ceiling });
+		wallCeiling = (screenHeight / 2.0f) - (screenHeight / distance);
+		wallFloor = screenHeight - wallCeiling;
+
+		visualOffset = spriteHeight * 0.25f;
+		spriteTop = wallFloor - spriteHeight + visualOffset;
+		slice.setPosition({ (float)x, spriteTop });
 
 		m_window.draw(slice);
+
+		sf::RectangleShape debugLine;
+		debugLine.setSize({ (float)screenWidth, 1.0f });
+		debugLine.setPosition({ 0.0f, wallFloor });
+		debugLine.setFillColor(sf::Color::Green);
+		m_window.draw(debugLine);
 	}
 }
 
@@ -99,6 +113,7 @@ void Window::renderWalls(const Player& t_player, const Level& t_level)
 	int screenHeight = m_window.getSize().y;
 
 	m_depthBuffer.resize(screenWidth);
+	m_floorBuffer.resize(screenWidth);
 
 	auto pos = t_player.getPosition();
 	float angle = t_player.getAngle();
@@ -151,6 +166,7 @@ void Window::renderWalls(const Player& t_player, const Level& t_level)
 		//calculate wall height on screen
 		ceiling = (screenHeight / 2.0) - screenHeight / distanceToWall;
 		floor = screenHeight - ceiling;
+		m_floorBuffer[x] = floor; //store floor in floor buffer
 
 		shade = 255 - (distanceToWall * 20); //shading based on distance
 		shade = std::max(0, shade);
