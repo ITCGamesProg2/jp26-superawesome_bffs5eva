@@ -10,6 +10,7 @@ Enemy::Enemy()
 	m_state = States::Idle;
 	m_sprite.setTexture(m_texture,true);
 	m_sprite.setTextureRect(sf::IntRect({ 0,0 }, { 48, 48 }));
+	m_sprite.setOrigin({ 24.0f, 24.0f });
 }
 
 void Enemy::init(int t_levelWidth, sf::Vector2f t_pos)

@@ -83,6 +83,11 @@ void Game::update(sf::Time t_deltaTime)
 					(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
 					m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()),
 					m_player.getPosition());
+
+	if (!(m_player.getHealth() > 0))
+	{
+		gameOver();
+	}
 }
 
 void Game::spawnEnemy()

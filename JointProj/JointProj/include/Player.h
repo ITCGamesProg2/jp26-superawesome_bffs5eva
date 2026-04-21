@@ -18,6 +18,7 @@ public:
 
 	sf::Vector2f getPosition() const;
 	float getAngle() const;
+	int getHealth() const;
 									
 private:
 	void shoot();					//shoots a bullet
