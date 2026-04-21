@@ -14,8 +14,91 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 {
 	m_window.clear();
 
+	renderWalls(t_player, t_level);
+	renderEnemy(t_player, t_enemy);
+	renderMiniMap(t_player, t_enemy, t_level);
+
+	m_window.display();
+}
+
+void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
+{
 	int screenWidth = m_window.getSize().x;
 	int screenHeight = m_window.getSize().y;
+
+	sf::Vector2f playerPos = t_player.getPosition();
+	float playerAngle = t_player.getAngle();
+	sf::Vector2f enemyPos = t_enemy.getPosition();
+
+	//player to enemy
+	float dx = enemyPos.x - playerPos.x;
+	float dy = enemyPos.y - playerPos.y;
+	float distance = std::sqrt(dx * dx + dy * dy); //calculate distance to enemy
+	if (distance < 0.1f) return;
+
+	//angle from player to enemy
+	float angleToEnemy = std::atan2(dy, dx);
+	//difference between where player is looking and enemy direction
+	float angleDiff = angleToEnemy - playerAngle;
+
+	//normalize angle - range [-PI, PI]
+	while (angleDiff < -3.14159f) angleDiff = angleDiff + (2.0f * 3.14159f);
+	while (angleDiff > 3.14159f) angleDiff = angleDiff - (2.0f * 3.14159f);
+
+	if (std::abs(angleDiff) > m_FOV / 2.0f) return;
+
+	//convert angle difference to screen X position
+	float screenX = (angleDiff + m_FOV / 2.0f) / m_FOV * screenWidth;
+	int column = static_cast<int>(screenX);
+	if (column < 0 || column >= m_depthBuffer.size()) return;
+	if (distance > m_depthBuffer[column]) return;
+
+	sf::Sprite sprite = t_enemy.getSprite();
+
+	//calculate size of sprite based on distance
+	float size = screenHeight / distance;
+	float spriteScreenX = screenX;
+	float spriteWidth = size;
+	float spriteHeight = size;
+
+	//determine horizontal range on screen where sprite will be drawn
+	int drawStartX = (int)(spriteScreenX - spriteWidth / 2.0f);
+	int drawEndX = (int)(spriteScreenX + spriteWidth / 2.0f);
+
+	float texXRatio = 0.0f;
+	int texX = 0;
+
+	float floor = 0.0f;
+	float ceiling = 0.0f;
+
+	for (int x = drawStartX; x < drawEndX; x++) //each vertical slice of the sprite
+	{
+		if ((x < 0 || x >= screenWidth) || (distance > m_depthBuffer[x])) continue;
+		//column of the texture to use
+		texXRatio = (float)(x - drawStartX) / spriteWidth;
+		texX = (int)(texXRatio * 48);
+
+		//make 1 pixel wide vertical slice from texture
+		sf::Sprite slice = t_enemy.getSprite();
+		slice.setTextureRect(sf::IntRect({ texX, 0 }, { 1, 48 }));
+		slice.setScale({ 1.0f, spriteHeight / 48.0f });
+
+		//feet on floor
+		floor = screenHeight / 2.0f + screenHeight / distance;
+		ceiling = floor - spriteHeight;
+
+		slice.setPosition({ (float)x, ceiling });
+
+		m_window.draw(slice);
+	}
+}
+
+void Window::renderWalls(const Player& t_player, const Level& t_level)
+{
+	int screenWidth = m_window.getSize().x;
+	int screenHeight = m_window.getSize().y;
+
+	m_depthBuffer.resize(screenWidth);
 
 	auto pos = t_player.getPosition();
 	float angle = t_player.getAngle();
@@ -36,17 +119,19 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 
 	int shade = 0;
 
-	//draw walls
-	for (int x = 0; x < screenWidth; x++)
+	for (int x = 0; x < screenWidth; x++) //each vertical slice of wall
 	{
+		//calculate ray angle for this slice
 		rayAngle = (angle - m_FOV / 2.0f) + ((float)x / screenWidth) * m_FOV;
 
 		distanceToWall = 0.0f;
 		hitWall = false;
 
+		//direction vector for ray
 		eyeX = cos(rayAngle);
 		eyeY = sin(rayAngle);
 
+		//step forward along ray until wall is hit or max depth reached
 		while (!hitWall && distanceToWall < m_maxDepth)
 		{
 			distanceToWall += 0.05f;
@@ -54,20 +139,23 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 			testX = (int)(pos.x + eyeX * distanceToWall);
 			testY = (int)(pos.y + eyeY * distanceToWall);
 
-			if (t_level.getTileType(testX, testY) == 1)
+			if (t_level.getTileType(testX, testY) == 1) //check if ray hit a wall
 			{
 				hitWall = true;
 			}
 		}
 
-		distanceToWall *= cos(rayAngle - angle);
+		distanceToWall *= cos(rayAngle - angle); //correct distortion
+		m_depthBuffer[x] = distanceToWall; //store distance in depth buffer
 
+		//calculate wall height on screen
 		ceiling = (screenHeight / 2.0) - screenHeight / distanceToWall;
 		floor = screenHeight - ceiling;
 
-		shade = 255 - (distanceToWall * 20);
+		shade = 255 - (distanceToWall * 20); //shading based on distance
 		shade = std::max(0, shade);
 
+		//create verticle slice
 		sf::RectangleShape wall;
 		wall.setSize({ 1, (float)(floor - ceiling) });
 		wall.setPosition({ (float)x, (float)ceiling });
@@ -75,44 +163,6 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 
 		m_window.draw(wall);
 	}
-
-	//draw enemy
-	sf::Vector2f playerPos = t_player.getPosition();
-	float playerAngle = t_player.getAngle();
-	sf::Vector2f enemyPos = t_enemy.getPosition();
-
-	float dx = enemyPos.x - playerPos.x;
-	float dy = enemyPos.y - playerPos.y;
-	float distance = std::sqrt(dx * dx + dy * dy);
-
-	float angleToEnemy = std::atan2(dy, dx);
-	float angleDiff = angleToEnemy - playerAngle;
-
-	while (angleDiff < -3.14159f) angleDiff += 2 * 3.14159f;
-	while (angleDiff > 3.14159f) angleDiff -= 2 * 3.14159f;
-
-	if (std::abs(angleDiff) < m_FOV / 2.0f)
-	{
-		// visible
-	}
-
-	float screenX = (angleDiff + m_FOV / 2.0f) / m_FOV * screenWidth;
-
-	float size = screenHeight / distance;
-
-	sf::Sprite sprite = t_enemy.getSprite();
-
-	sprite.setOrigin({ 24.0f, 24.0f }); // half of 48x48
-	sprite.setScale({ size / 48.0f, size / 48.0f });
-
-	ceiling = (screenHeight / 2.0f) - size / 2.0f;
-	sprite.setPosition({ screenX, ceiling + size / 2.0f });
-
-	m_window.draw(sprite);
-
-	renderMiniMap(t_player, t_enemy, t_level);
-
-	m_window.display();
 }
 
 void Window::renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level)

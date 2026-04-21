@@ -15,6 +15,10 @@ public:
 
 	void render(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
 	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
+
+	void renderEnemy(const Player& t_player, const Enemy& t_enemy);
+	void renderWalls(const Player& t_player, const Level& t_level);
+
 	bool isOpen() const;
 	void close();
 										
@@ -25,4 +29,5 @@ private:
 	sf::RenderWindow m_window;
 	float m_FOV{ 3.14159f / 3.0f };
 	float m_maxDepth{ 20.0f };
+	std::vector<float> m_depthBuffer;
 };
