@@ -74,6 +74,11 @@ float Player::getAngle() const
 	return m_angle;
 }
 
+int Player::getHealth() const
+{
+	return m_health;
+}
+
 void Player::shoot()
 {
 }

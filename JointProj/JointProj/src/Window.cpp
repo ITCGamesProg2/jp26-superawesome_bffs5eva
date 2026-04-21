@@ -36,6 +36,7 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 
 	int shade = 0;
 
+	//draw walls
 	for (int x = 0; x < screenWidth; x++)
 	{
 		rayAngle = (angle - m_FOV / 2.0f) + ((float)x / screenWidth) * m_FOV;
@@ -75,7 +76,39 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 		m_window.draw(wall);
 	}
 
-	m_window.draw(t_enemy.getSprite());
+	//draw enemy
+	sf::Vector2f playerPos = t_player.getPosition();
+	float playerAngle = t_player.getAngle();
+	sf::Vector2f enemyPos = t_enemy.getPosition();
+
+	float dx = enemyPos.x - playerPos.x;
+	float dy = enemyPos.y - playerPos.y;
+	float distance = std::sqrt(dx * dx + dy * dy);
+
+	float angleToEnemy = std::atan2(dy, dx);
+	float angleDiff = angleToEnemy - playerAngle;
+
+	while (angleDiff < -3.14159f) angleDiff += 2 * 3.14159f;
+	while (angleDiff > 3.14159f) angleDiff -= 2 * 3.14159f;
+
+	if (std::abs(angleDiff) < m_FOV / 2.0f)
+	{
+		// visible
+	}
+
+	float screenX = (angleDiff + m_FOV / 2.0f) / m_FOV * screenWidth;
+
+	float size = screenHeight / distance;
+
+	sf::Sprite sprite = t_enemy.getSprite();
+
+	sprite.setOrigin({ 24.0f, 24.0f }); // half of 48x48
+	sprite.setScale({ size / 48.0f, size / 48.0f });
+
+	ceiling = (screenHeight / 2.0f) - size / 2.0f;
+	sprite.setPosition({ screenX, ceiling + size / 2.0f });
+
+	m_window.draw(sprite);
 
 	renderMiniMap(t_player, t_enemy, t_level);
 
