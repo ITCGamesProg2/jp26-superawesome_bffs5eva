@@ -99,11 +99,11 @@ void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
 
 		m_window.draw(slice);
 
-		sf::RectangleShape debugLine;
+		/*sf::RectangleShape debugLine;
 		debugLine.setSize({ (float)screenWidth, 1.0f });
 		debugLine.setPosition({ 0.0f, wallFloor });
 		debugLine.setFillColor(sf::Color::Green);
-		m_window.draw(debugLine);
+		m_window.draw(debugLine);*/
 	}
 }
 
