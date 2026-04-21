@@ -15,6 +15,6 @@ private:
 	const static int m_CARDS_PER_HAND{ 5 };
 
 	//can change to one std::pair array later
-	CardType m_cardType[CARDS_PER_HAND];
-	int m_cardNumber[CARDS_PER_HAND];
+	CardType m_cardType[m_CARDS_PER_HAND];
+	int m_cardNumber[m_CARDS_PER_HAND];
 };

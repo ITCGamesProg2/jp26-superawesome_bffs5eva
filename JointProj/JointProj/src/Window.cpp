@@ -75,6 +75,8 @@ void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t
 		m_window.draw(wall);
 	}
 
+	m_window.draw(t_enemy.getSprite());
+
 	renderMiniMap(t_player, t_enemy, t_level);
 
 	m_window.display();
