@@ -8,9 +8,10 @@ Bullet::Bullet()
 	isActive = false;
 }
 
-void Bullet::init(sf::Vector2f t_playerPos, sf::Vector2f t_playerAngle)
+void Bullet::init(sf::Vector2f t_playerPos, float t_playerAngle)
 {
 	isActive = true;
+	m_rotation = t_playerAngle;
 	body.setPosition(t_playerPos);
 }
 
@@ -18,8 +19,8 @@ void Bullet::update()
 {
 	if (isActive)
 	{
-		position.x += (SPEED + t_playerAngle.x);
-		position.y += (SPEED + t_playerAngle.y);
+		position.x += (SPEED + m_rotation);
+		position.y += (SPEED + m_rotation);
 		body.setPosition(position);
 	}
 }
@@ -27,4 +28,9 @@ void Bullet::update()
 bool Bullet::checkActive() const
 {
 	return isActive;
+}
+
+sf::RectangleShape Bullet::getBody() const
+{
+	return body;
 }

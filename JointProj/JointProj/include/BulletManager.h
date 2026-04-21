@@ -4,7 +4,7 @@
 class BulletManager
 {
 public:
-	void spawnBullets();			//adds new bullet
+	void spawnBullets(sf::Vector2f t_playerPos, float t_playerAngle);			//adds new bullet
 	void updateBullets();			//updates all active bullets
 	void removeBullet();			//removes a bullet
 									

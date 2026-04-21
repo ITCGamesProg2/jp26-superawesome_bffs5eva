@@ -102,6 +102,8 @@ void Window::renderMiniMap(const Level& t_level)
 			}
 		}
 	}
+
+	
 }
 
 bool Window::isOpen() const

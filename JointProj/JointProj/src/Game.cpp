@@ -88,6 +88,11 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+	{
+		m_bulletManager.spawnBullets(m_player.getPosition(), m_player.getAngle());
+	}
 }
 
 void Game::setupTexts()

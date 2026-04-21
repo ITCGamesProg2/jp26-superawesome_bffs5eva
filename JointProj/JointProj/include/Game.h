@@ -14,6 +14,8 @@
 #include "Window.h"
 #include "Level.h"
 
+#include "BulletManager.h"
+
 #include "Player.h"
 
 class Game
@@ -42,6 +44,9 @@ private:
 	Level m_level;
 
 	Player m_player;
+
+	Bullet m_bullet;
+	BulletManager m_bulletManager;
 
 	//bool to stop door opening and closing rappidly
 	bool doorPressed = false;
