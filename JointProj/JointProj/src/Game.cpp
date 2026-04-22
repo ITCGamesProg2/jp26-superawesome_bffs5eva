@@ -7,7 +7,7 @@ Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 	setupAudio(); // load sounds
 
 	m_level.loadLevel(1);
-	m_enemy.init(m_level.getWidth(), { 7.0f, 13.0f });
+	m_enemy.init(m_level, { 7.0f, 13.0f });
 
 	m_button1.setSize({ 544, 176 });
 	m_button1.setPosition({ 128, 16 });
@@ -135,10 +135,9 @@ void Game::update(sf::Time t_deltaTime)
 	case States::GAME_RUNNING:
 		m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
 
-		m_enemy.update(t_deltaTime.asMilliseconds(), m_level,
+		m_enemy.update(t_deltaTime.asMilliseconds(),
 			(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
-			m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()),
-			m_player.getPosition());
+			m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()));
 
 		if (!(m_player.getHealth() > 0))
 		{
