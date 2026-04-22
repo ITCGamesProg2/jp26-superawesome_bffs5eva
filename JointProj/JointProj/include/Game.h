@@ -19,7 +19,7 @@
 
 enum class States
 {
-	GAME_MENU, GAME_INSTRUCTIONS, GAME_SETTINGS, GAME_RUNNING, GAME_WIN, GAME_LOSE
+	GAME_MENU, GAME_INSTRUCTIONS, GAME_SETTINGS, GAME_RUNNING, GAME_PAUSE, GAME_WIN, GAME_LOSE
 };
 
 class Game
@@ -37,8 +37,7 @@ private:
 	void update(sf::Time t_deltaTime);
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
-	void checkKeyboardState();
-	void processMouseClick();
+	void processMouseClick(const std::optional<sf::Event> t_event);
 									
 	void spawnEnemy();				//spawns in an enemy
 	void checkCollision();			//runs all collision checks
@@ -53,7 +52,6 @@ private:
 	sf::RectangleShape m_instructionsButton;
 	sf::RectangleShape m_settingsButton;
 	sf::RectangleShape m_backButton;
-	bool m_mouseWasPressed{ false };
 
 	Player m_player;
 	Enemy m_enemy;

@@ -40,11 +40,8 @@ void Game::run()
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			processEvents(); // at least 60 fps
 			update(timePerFrame); //60 fps
 		}
-
-		//m_window.render(m_player, m_enemy, m_level); // as many as possible
 	}
 }
 
@@ -52,13 +49,17 @@ void Game::processEvents()
 {
 	while (const std::optional newEvent = m_window.pollEvent())
 	{
-		if ( newEvent->is<sf::Event::Closed>()) // close window message 
+		if ( newEvent->is<sf::Event::Closed>()) //close window message 
 		{
 			m_DELETEexitGame = true;
 		}
-		if (newEvent->is<sf::Event::KeyPressed>()) //user pressed a key
+		else if (newEvent->is<sf::Event::KeyPressed>()) //user pressed a key
 		{
 			processKeys(newEvent);
+		}
+		else if (newEvent->is<sf::Event::MouseButtonPressed>())
+		{
+			processMouseClick(newEvent);
 		}
 	}
 }
@@ -69,60 +70,51 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 
 	if (sf::Keyboard::Key::Escape == newKeypress->code)
 	{
-		m_DELETEexitGame = true; 
-	}
-}
-
-void Game::checkKeyboardState()
-{
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-	{
-		m_DELETEexitGame = true; 
-	}
-}
-
-void Game::processMouseClick()
-{
-	bool mouseIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
-
-	if (mouseIsPressed && !m_mouseWasPressed)
-	{
-		switch (m_gameState)
+		if (m_gameState == States::GAME_RUNNING)
 		{
-		case States::GAME_MENU:
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-			{
-				sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
-
-				if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-				{
-					m_gameState = States::GAME_RUNNING;
-				}
-				else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-				{
-					m_gameState = States::GAME_INSTRUCTIONS;
-				}
-				else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-				{
-					m_gameState = States::GAME_SETTINGS;
-				}
-			}
-			break;
-		case States::GAME_INSTRUCTIONS:
-		case States::GAME_SETTINGS:
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-			{
-				sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
-
-				if (m_backButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-				{
-					m_gameState = States::GAME_MENU;
-				}
-			}
+			m_gameState = States::GAME_PAUSE;
+		}
+		else if (m_gameState != States::GAME_MENU)
+		{
+			m_gameState = States::GAME_MENU;
+		}
+		else
+		{
+			m_DELETEexitGame = true;
 		}
 	}
+}
 
-	m_mouseWasPressed = mouseIsPressed;
+void Game::processMouseClick(const std::optional<sf::Event> t_event)
+{
+	auto mouseClick = t_event->getIf<sf::Event::MouseButtonPressed>();
+
+	switch (m_gameState)
+	{
+	case States::GAME_MENU:
+		if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		{
+			m_gameState = States::GAME_RUNNING;
+		}
+		else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		{
+			m_gameState = States::GAME_INSTRUCTIONS;
+		}
+		else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		{
+			m_gameState = States::GAME_SETTINGS;
+		}
+		break;
+	case States::GAME_INSTRUCTIONS:
+	case States::GAME_SETTINGS:
+		if (m_backButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		{
+			m_gameState = States::GAME_MENU;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void Game::update(sf::Time t_deltaTime)
@@ -136,18 +128,14 @@ void Game::update(sf::Time t_deltaTime)
 	{
 	case States::GAME_MENU:
 		m_window.renderMenu();
-		processMouseClick();
-		break;
-	case States::GAME_SETTINGS:
-		processMouseClick();
 		break;
 	case States::GAME_INSTRUCTIONS:
-		processMouseClick();
+		break;
+	case States::GAME_SETTINGS:
 		break;
 	case States::GAME_RUNNING:
-		checkKeyboardState();
-
 		m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
+
 		m_enemy.update(t_deltaTime.asMilliseconds(), m_level,
 			(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
 			m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()),
@@ -159,11 +147,12 @@ void Game::update(sf::Time t_deltaTime)
 		}
 
 		m_window.renderGameRunning(m_player, m_enemy, m_level);
-
 		break;
 	case States::GAME_WIN:
 		break;
 	case States::GAME_LOSE:
+		break;
+	default:
 		break;
 	}
 }
