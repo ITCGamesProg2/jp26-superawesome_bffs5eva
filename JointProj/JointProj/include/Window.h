@@ -24,7 +24,7 @@ public:
 	bool isOpen() const;
 	void close();
 
-	sf::RenderWindow getWindow();
+	sf::RenderWindow &getWindow();
 										
 private:
 	const static int s_screenWidth{ 800 };

@@ -17,6 +17,9 @@ Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 
 	m_settingsButton.setSize({ 544, 176 });
 	m_settingsButton.setPosition({ 128, 400 });
+
+	m_backButton.setSize({ 544, 176 });
+	m_backButton.setPosition({ 128, 16 });
 }
 
 Game::~Game()
@@ -80,25 +83,46 @@ void Game::checkKeyboardState()
 
 void Game::processMouseClick()
 {
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-	{
-		sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
-		std::cout << mouseClick.x << " " << mouseClick.y << "\n";
+	bool mouseIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
 
-		if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+	if (mouseIsPressed && !m_mouseWasPressed)
+	{
+		switch (m_gameState)
 		{
-			m_gameState = States::GAME_RUNNING;
-			std::cout << "play button clicked" << "\n";
-		}
-		else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-		{
-			m_gameState = States::GAME_INSTRUCTIONS;
-		}
-		else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
-		{
-			m_gameState = States::GAME_SETTINGS;
+		case States::GAME_MENU:
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			{
+				sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
+
+				if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+				{
+					m_gameState = States::GAME_RUNNING;
+				}
+				else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+				{
+					m_gameState = States::GAME_INSTRUCTIONS;
+				}
+				else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+				{
+					m_gameState = States::GAME_SETTINGS;
+				}
+			}
+			break;
+		case States::GAME_INSTRUCTIONS:
+		case States::GAME_SETTINGS:
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+			{
+				sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
+
+				if (m_backButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+				{
+					m_gameState = States::GAME_MENU;
+				}
+			}
 		}
 	}
+
+	m_mouseWasPressed = mouseIsPressed;
 }
 
 void Game::update(sf::Time t_deltaTime)
@@ -115,8 +139,10 @@ void Game::update(sf::Time t_deltaTime)
 		processMouseClick();
 		break;
 	case States::GAME_SETTINGS:
+		processMouseClick();
 		break;
 	case States::GAME_INSTRUCTIONS:
+		processMouseClick();
 		break;
 	case States::GAME_RUNNING:
 		checkKeyboardState();

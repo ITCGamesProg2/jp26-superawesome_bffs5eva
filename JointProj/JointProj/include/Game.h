@@ -52,6 +52,8 @@ private:
 	sf::RectangleShape m_playButton;
 	sf::RectangleShape m_instructionsButton;
 	sf::RectangleShape m_settingsButton;
+	sf::RectangleShape m_backButton;
+	bool m_mouseWasPressed{ false };
 
 	Player m_player;
 	Enemy m_enemy;
