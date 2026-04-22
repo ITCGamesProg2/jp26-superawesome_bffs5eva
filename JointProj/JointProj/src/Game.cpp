@@ -9,17 +9,14 @@ Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 	m_level.loadLevel(1);
 	m_enemy.init(m_level.getWidth(), { 7.0f, 13.0f });
 
-	m_playButton.setSize({ 544, 176 });
-	m_playButton.setPosition({ 128, 16 });
+	m_button1.setSize({ 544, 176 });
+	m_button1.setPosition({ 128, 16 });
 
-	m_instructionsButton.setSize({ 544, 176 });
-	m_instructionsButton.setPosition({ 128, 208 });
+	m_button2.setSize({ 544, 176 });
+	m_button2.setPosition({ 128, 208 });
 
-	m_settingsButton.setSize({ 544, 176 });
-	m_settingsButton.setPosition({ 128, 400 });
-
-	m_backButton.setSize({ 544, 176 });
-	m_backButton.setPosition({ 128, 16 });
+	m_button3.setSize({ 544, 176 });
+	m_button3.setPosition({ 128, 400 });
 }
 
 Game::~Game()
@@ -92,22 +89,22 @@ void Game::processMouseClick(const std::optional<sf::Event> t_event)
 	switch (m_gameState)
 	{
 	case States::GAME_MENU:
-		if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		if (m_button1.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
 		{
 			m_gameState = States::GAME_RUNNING;
 		}
-		else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		else if (m_button2.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
 		{
 			m_gameState = States::GAME_INSTRUCTIONS;
 		}
-		else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		else if (m_button3.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
 		{
 			m_gameState = States::GAME_SETTINGS;
 		}
 		break;
 	case States::GAME_INSTRUCTIONS:
 	case States::GAME_SETTINGS:
-		if (m_backButton.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		if (m_button1.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
 		{
 			m_gameState = States::GAME_MENU;
 		}
@@ -130,8 +127,10 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.renderMenu();
 		break;
 	case States::GAME_INSTRUCTIONS:
+		m_window.renderInstructions();
 		break;
 	case States::GAME_SETTINGS:
+		m_window.renderSettings();
 		break;
 	case States::GAME_RUNNING:
 		m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);

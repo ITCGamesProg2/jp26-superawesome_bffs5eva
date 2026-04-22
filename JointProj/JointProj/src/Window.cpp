@@ -6,10 +6,24 @@ Window::Window() : m_window(sf::VideoMode({ s_screenWidth, s_screenHeight }), "G
 
 	if (!m_menuTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\menu.png"))
 	{
-		std::cout << "problem loading enemy texture" << std::endl;
+		std::cout << "problem loading menu texture" << std::endl;
 	}
 
 	m_menuSprite.setTexture(m_menuTexture, true);
+
+	if (!m_instructionsTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\instructions.png"))
+	{
+		std::cout << "problem loading instructions texture" << std::endl;
+	}
+
+	m_instructionsSprite.setTexture(m_instructionsTexture, true);
+
+	if (!m_settingsTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\settings.png"))
+	{
+		std::cout << "problem loading settings texture" << std::endl;
+	}
+
+	m_settingsSprite.setTexture(m_settingsTexture, true);
 }
 
 std::optional<sf::Event> Window::pollEvent()
@@ -22,6 +36,24 @@ void Window::renderMenu()
 	m_window.clear();
 
 	m_window.draw(m_menuSprite);
+
+	m_window.display();
+}
+
+void Window::renderInstructions()
+{
+	m_window.clear();
+
+	m_window.draw(m_instructionsSprite);
+
+	m_window.display();
+}
+
+void Window::renderSettings()
+{
+	m_window.clear();
+
+	m_window.draw(m_settingsSprite);
 
 	m_window.display();
 }

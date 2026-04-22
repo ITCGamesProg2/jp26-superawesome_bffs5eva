@@ -14,6 +14,8 @@ public:
 	std::optional<sf::Event> pollEvent();
 
 	void renderMenu();
+	void renderInstructions();
+	void renderSettings();
 
 	void renderGameRunning(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
 	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
@@ -39,4 +41,8 @@ private:
 	//temp menu stuff
 	sf::Texture m_menuTexture;
 	sf::Sprite m_menuSprite{ m_menuTexture };
+	sf::Texture m_instructionsTexture;
+	sf::Sprite m_instructionsSprite{ m_instructionsTexture };
+	sf::Texture m_settingsTexture;
+	sf::Sprite m_settingsSprite{ m_settingsTexture };
 };
