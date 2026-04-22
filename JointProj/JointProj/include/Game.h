@@ -48,8 +48,8 @@ private:
 	Bullet m_bullet;
 	BulletManager m_bulletManager;
 
-	//bool to stop door opening and closing rappidly
-	bool doorPressed = false;
+	//bool to stop door opening and closing rappidly and bullets firing to often. Prevents opening doors at the same time as firing
+	bool buttonDown = false;
 
 	sf::Font m_jerseyFont;// font used by message
 	

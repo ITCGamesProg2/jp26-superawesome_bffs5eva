@@ -8,7 +8,9 @@ public:
 	void updateBullets();			//updates all active bullets
 	void removeBullet();			//removes a bullet
 
-	sf::RectangleShape draw(int t_index);
+	sf::Vector2f getPos(int t_index) const;
+
+	bool isActive(int t_index) const;
 									
 private:
 	const static int MAX_BULLETS{ 10 };

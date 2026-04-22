@@ -77,22 +77,28 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
-	if (!doorPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+	if (!buttonDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
 	{
 		m_level.toggleDoor();
-		doorPressed = true;
+		buttonDown = true;
 	}
-	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+	else if(!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
 	{
-		doorPressed = false;
+		buttonDown = false;
 	}
 
 	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+	if (!buttonDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
 	{
 		m_bulletManager.spawnBullets(m_player.getPosition(), m_player.getAngle());
 	}
+	else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+	{
+		buttonDown = false;
+	}
+
+	m_bulletManager.updateBullets();
 }
 
 void Game::setupTexts()

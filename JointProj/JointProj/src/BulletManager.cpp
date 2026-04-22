@@ -19,10 +19,12 @@ void BulletManager::updateBullets()
 	}
 }
 
-sf::RectangleShape BulletManager::draw(int t_index)
+sf::Vector2f BulletManager::getPos(int t_index) const
 {
-	if (bullets[t_index].checkActive())
-	{
-		return bullets[t_index].getBody();
-	}
+	return bullets[t_index].getPosition();
+}
+
+bool BulletManager::isActive(int t_index) const
+{
+	return bullets[t_index].checkActive();
 }

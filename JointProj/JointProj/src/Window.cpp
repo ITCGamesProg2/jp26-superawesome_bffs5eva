@@ -70,9 +70,16 @@ void Window::render(const Player& t_player, const Level& t_level, BulletManager&
 		wall.setFillColor(sf::Color(shade, shade, shade));
 		m_window.draw(wall);
 	}
+
 	for (int index = 0; index < 10; index++)
 	{
-		m_window.draw(t_bulletManager.draw(index));
+		if (t_bulletManager.isActive(index))
+		{
+			sf::RectangleShape bullet;
+			bullet.setSize(sf::Vector2f(10, 10));
+			bullet.setPosition(t_bulletManager.getPos(index));
+			m_window.draw(bullet);
+		}
 	}
 
 	renderMiniMap(t_level);

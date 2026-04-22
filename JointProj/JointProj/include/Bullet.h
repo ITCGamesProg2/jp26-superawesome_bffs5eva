@@ -10,10 +10,9 @@ public:
 	void update();					//updates position
 	void checkCollision();			//with walls and enemy
 	bool checkActive() const;
-	sf::RectangleShape getBody() const;
+	sf::Vector2f getPosition() const;
 									
 private:
-	sf::RectangleShape body;
 	sf::Vector2f position{ -10.0f, -10.0f };
 	float m_rotation = 0;
 	const static int SPEED{ 100 };
