@@ -48,10 +48,9 @@ private:
 	Level m_level;
 	States m_gameState{ States::GAME_MENU };
 
-	sf::RectangleShape m_playButton;
-	sf::RectangleShape m_instructionsButton;
-	sf::RectangleShape m_settingsButton;
-	sf::RectangleShape m_backButton;
+	sf::RectangleShape m_button1;
+	sf::RectangleShape m_button2;
+	sf::RectangleShape m_button3;
 
 	Player m_player;
 	Enemy m_enemy;
