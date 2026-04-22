@@ -126,14 +126,20 @@ void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
 	for (int x = drawStartX; x < drawEndX; x++) //each vertical slice of the sprite
 	{
 		if ((x < 0 || x >= screenWidth) || (distance > m_depthBuffer[x])) continue;
-		//column of the texture to use
-		texXRatio = (float)(x - drawStartX) / spriteWidth;
-		texX = (int)(texXRatio * 48);
 
 		//make 1 pixel wide vertical slice from texture
 		sf::Sprite slice = t_enemy.getSprite();
-		slice.setTextureRect(sf::IntRect({ texX, 0 }, { 1, 48 }));
-		slice.setScale({ 1.0f, spriteHeight / 48.0f });
+		sf::IntRect fullRect = slice.getTextureRect();
+
+		//column of the texture to use
+		texXRatio = (float)(x - drawStartX) / spriteWidth;
+		texX = (int)(texXRatio * (float)fullRect.size.x);
+
+		int texY = fullRect.position.y;
+		int texHeight = fullRect.size.y;
+
+		slice.setTextureRect(sf::IntRect({ fullRect.position.x + texX, texY }, { 1, texHeight }));
+		slice.setScale({ 1.0f, spriteHeight / (float)fullRect.size.y });
 
 		//feet on floor
 		spriteHeight = screenHeight / distance;
