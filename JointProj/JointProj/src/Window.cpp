@@ -106,58 +106,49 @@ void Window::renderEnemy(const Player& t_player, const Enemy& t_enemy)
 	//calculate size of sprite based on distance
 	float size = screenHeight / distance;
 	float spriteScreenX = screenX;
-	float spriteWidth = size;
-	float spriteHeight = size;
 
 	//determine horizontal range on screen where sprite will be drawn
+	float spriteHeight = screenHeight / distance;
+	float spriteWidth = spriteHeight;
+
 	int drawStartX = (int)(spriteScreenX - spriteWidth / 2.0f);
 	int drawEndX = (int)(spriteScreenX + spriteWidth / 2.0f);
 
 	float texXRatio = 0.0f;
 	int texX = 0;
+	float texCoord = 0.0f;
 
 	float wallHeight = 0.0f;
-	float wallCeiling = 0.0f;
-	float wallFloor = 0.0f;
 
-	float visualOffset = 0.0f;
-	float spriteTop = 0.0f;
+	sf::Sprite baseSprite = t_enemy.getSprite();
+	sf::IntRect fullRect = baseSprite.getTextureRect();
 
-	for (int x = drawStartX; x < drawEndX; x++) //each vertical slice of the sprite
+	float wallCeiling = (screenHeight / 2.0f) - (screenHeight / distance);
+	float wallFloor = screenHeight - wallCeiling;
+
+	float visualOffset = spriteHeight * 0.25f;
+	float spriteTop = wallFloor - spriteHeight + visualOffset;
+
+	for (int x = drawStartX; x < drawEndX; x++)
 	{
 		if ((x < 0 || x >= screenWidth) || (distance > m_depthBuffer[x])) continue;
 
-		//make 1 pixel wide vertical slice from texture
-		sf::Sprite slice = t_enemy.getSprite();
-		sf::IntRect fullRect = slice.getTextureRect();
+		texCoord = (x - drawStartX) / spriteWidth;
+		texCoord = std::clamp(texCoord, 0.0f, 0.999f);
 
-		//column of the texture to use
-		texXRatio = (float)(x - drawStartX) / spriteWidth;
-		texX = (int)(texXRatio * (float)fullRect.size.x);
+		texX = (int)(texCoord * fullRect.size.x);
 
-		int texY = fullRect.position.y;
-		int texHeight = fullRect.size.y;
+		sf::Sprite slice = baseSprite;
 
-		slice.setTextureRect(sf::IntRect({ fullRect.position.x + texX, texY }, { 1, texHeight }));
+		slice.setTextureRect(sf::IntRect(
+			{ fullRect.position.x + texX, fullRect.position.y },
+			{ 1, fullRect.size.y }
+		));
+
 		slice.setScale({ 1.0f, spriteHeight / (float)fullRect.size.y });
-
-		//feet on floor
-		spriteHeight = screenHeight / distance;
-
-		wallCeiling = (screenHeight / 2.0f) - (screenHeight / distance);
-		wallFloor = screenHeight - wallCeiling;
-
-		visualOffset = spriteHeight * 0.25f;
-		spriteTop = wallFloor - spriteHeight + visualOffset;
 		slice.setPosition({ (float)x, spriteTop });
 
 		m_window.draw(slice);
-
-		sf::RectangleShape debugLine;
-		debugLine.setSize({ (float)screenWidth, 1.0f });
-		debugLine.setPosition({ 0.0f, wallFloor });
-		debugLine.setFillColor(sf::Color::Green);
-		m_window.draw(debugLine);
 	}
 }
 
