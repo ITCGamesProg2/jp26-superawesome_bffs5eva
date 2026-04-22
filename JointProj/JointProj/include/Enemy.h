@@ -4,7 +4,7 @@
 
 #include "Level.h"
 
-enum States {Idle, Run, Attack, Die};
+enum EnemyStates {Idle, Run, Attack, Die};
 
 class Enemy
 {
