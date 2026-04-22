@@ -99,5 +99,5 @@ private:
 	float m_frameTime{ 0.12f };
 
 	const int m_frameWidth{ 48 };
-	const int m_frameHeight{ 84 };
+	const int m_frameHeight{ 48 };
 };
