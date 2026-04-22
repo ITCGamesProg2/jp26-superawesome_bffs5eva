@@ -17,5 +17,7 @@ private:
 	float m_rotation = 0;
 	const static int SPEED{ 100 };
 
+	int lifeTime = 0;
+
 	bool isActive;
 };
