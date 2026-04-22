@@ -247,7 +247,7 @@ void Window::close()
 	m_window.close();
 }
 
-sf::RenderWindow Window::getWindow()
+sf::RenderWindow &Window::getWindow()
 {
 	return m_window;
 }
