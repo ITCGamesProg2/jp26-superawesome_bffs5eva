@@ -7,7 +7,7 @@ Enemy::Enemy()
 		std::cout << "problem loading enemy texture" << std::endl;
 	}
 	
-	m_state = States::Idle;
+	m_state = EnemyStates::Idle;
 	m_sprite.setTexture(m_texture,true);
 	m_sprite.setTextureRect(sf::IntRect({ 0,0 }, { 48, 48 }));
 	m_sprite.setOrigin({ 24.0f, 24.0f });
@@ -17,7 +17,7 @@ void Enemy::init(int t_levelWidth, sf::Vector2f t_pos)
 {
 	m_levelWidth = t_levelWidth;
 	m_isActive = true;
-	m_state = States::Idle;
+	m_state = EnemyStates::Idle;
 	m_position = t_pos;
 	m_velocity = { 0.0f, 0.0f };
 }

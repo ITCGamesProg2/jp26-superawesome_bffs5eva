@@ -17,6 +17,11 @@
 #include "Player.h"
 #include "Enemy.h"
 
+enum class States
+{
+	GAME_MENU, GAME_INSTRUCTIONS, GAME_SETTINGS, GAME_RUNNING, GAME_WIN, GAME_LOSE
+};
+
 class Game
 {
 public:
@@ -37,10 +42,11 @@ private:
 	void spawnEnemy();				//spawns in an enemy
 	void checkCollision();			//runs all collision checks
 
-	void gameOver();				//deals with when game finishes
+	void gameOver(bool t_loss);				//deals with when game finishes
 
 	Window m_window;
 	Level m_level;
+	States m_gameState{ States::GAME_MENU };
 
 	Player m_player;
 	Enemy m_enemy;

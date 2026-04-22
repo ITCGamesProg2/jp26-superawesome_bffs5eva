@@ -71,22 +71,38 @@ void Game::checkKeyboardState()
 
 void Game::update(sf::Time t_deltaTime)
 {
-	checkKeyboardState();
-
 	if (m_DELETEexitGame)
 	{
 		m_window.close();
 	}
 
-	m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
-	m_enemy.update(t_deltaTime.asMilliseconds(), m_level, 
-					(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
-					m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()),
-					m_player.getPosition());
-
-	if (!(m_player.getHealth() > 0))
+	switch (m_gameState)
 	{
-		gameOver();
+	case States::GAME_MENU:
+		break;
+	case States::GAME_SETTINGS:
+		break;
+	case States::GAME_INSTRUCTIONS:
+		break;
+	case States::GAME_RUNNING:
+		checkKeyboardState();
+
+		m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
+		m_enemy.update(t_deltaTime.asMilliseconds(), m_level,
+			(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
+			m_level.breadthFirstSearch(m_enemy.getPosition(), m_player.getPosition()),
+			m_player.getPosition());
+
+		if (!(m_player.getHealth() > 0))
+		{
+			gameOver(true);
+		}
+
+		break;
+	case States::GAME_WIN:
+		break;
+	case States::GAME_LOSE:
+		break;
 	}
 }
 
@@ -98,8 +114,18 @@ void Game::checkCollision()
 {
 }
 
-void Game::gameOver()
+void Game::gameOver(bool t_loss)
 {
+	if (t_loss)
+	{
+		m_gameState = States::GAME_LOSE;
+	}
+	else
+	{
+		m_gameState = States::GAME_WIN;
+	}
+
+	//calculate score
 }
 
 void Game::setupTexts()
