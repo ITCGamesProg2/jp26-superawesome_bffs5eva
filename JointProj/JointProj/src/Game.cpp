@@ -30,8 +30,8 @@ void Game::run()
 			processEvents(); // at least 60 fps
 			update(timePerFrame); //60 fps
 		}
-
-		m_window.render(m_player, m_level); // as many as possible
+		
+		m_window.render(m_player, m_level, m_bulletManager); // as many as possible
 	}
 }
 

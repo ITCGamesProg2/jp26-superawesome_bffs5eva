@@ -12,7 +12,7 @@ public:
 
 	std::optional<sf::Event> pollEvent();
 
-	void render(const Player& t_player, const Level& t_level);						//renders game
+	void render(const Player& t_player, const Level& t_level, BulletManager& t_bulletManager);						//renders game
 	void renderMiniMap(const Level& t_level);
 	bool isOpen() const;
 	void close();

@@ -18,3 +18,11 @@ void BulletManager::updateBullets()
 		bullets[index].update();
 	}
 }
+
+sf::RectangleShape BulletManager::draw(int t_index)
+{
+	if (bullets[t_index].checkActive())
+	{
+		return bullets[t_index].getBody();
+	}
+}

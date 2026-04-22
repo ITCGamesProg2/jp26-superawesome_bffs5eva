@@ -10,7 +10,7 @@ std::optional<sf::Event> Window::pollEvent()
 	return m_window.pollEvent();
 }
 
-void Window::render(const Player& t_player, const Level& t_level)
+void Window::render(const Player& t_player, const Level& t_level, BulletManager& t_bulletManager)
 {
 	m_window.clear();
 
@@ -69,6 +69,10 @@ void Window::render(const Player& t_player, const Level& t_level)
 		wall.setPosition({ (float)x, (float)ceiling });
 		wall.setFillColor(sf::Color(shade, shade, shade));
 		m_window.draw(wall);
+	}
+	for (int index = 0; index < 10; index++)
+	{
+		m_window.draw(t_bulletManager.draw(index));
 	}
 
 	renderMiniMap(t_level);
