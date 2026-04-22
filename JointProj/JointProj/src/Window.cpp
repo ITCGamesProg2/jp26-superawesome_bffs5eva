@@ -3,6 +3,13 @@
 Window::Window() : m_window(sf::VideoMode({ s_screenWidth, s_screenHeight }), "Game")
 {
 	m_window.setVerticalSyncEnabled(true);
+
+	if (!m_menuTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\menu.png"))
+	{
+		std::cout << "problem loading enemy texture" << std::endl;
+	}
+
+	m_menuSprite.setTexture(m_menuTexture, true);
 }
 
 std::optional<sf::Event> Window::pollEvent()
@@ -10,7 +17,16 @@ std::optional<sf::Event> Window::pollEvent()
 	return m_window.pollEvent();
 }
 
-void Window::render(const Player& t_player, const Enemy& t_enemy, const Level& t_level)
+void Window::renderMenu()
+{
+	m_window.clear();
+
+	m_window.draw(m_menuSprite);
+
+	m_window.display();
+}
+
+void Window::renderGameRunning(const Player& t_player, const Enemy& t_enemy, const Level& t_level)
 {
 	m_window.clear();
 
@@ -229,4 +245,9 @@ bool Window::isOpen() const
 void Window::close()
 {
 	m_window.close();
+}
+
+sf::RenderWindow Window::getWindow()
+{
+	return m_window;
 }

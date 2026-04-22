@@ -38,6 +38,7 @@ private:
 	void processEvents();
 	void processKeys(const std::optional<sf::Event> t_event);
 	void checkKeyboardState();
+	void processMouseClick();
 									
 	void spawnEnemy();				//spawns in an enemy
 	void checkCollision();			//runs all collision checks
@@ -47,6 +48,10 @@ private:
 	Window m_window;
 	Level m_level;
 	States m_gameState{ States::GAME_MENU };
+
+	sf::RectangleShape m_playButton;
+	sf::RectangleShape m_instructionsButton;
+	sf::RectangleShape m_settingsButton;
 
 	Player m_player;
 	Enemy m_enemy;
