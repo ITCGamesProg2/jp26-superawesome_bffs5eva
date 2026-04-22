@@ -13,7 +13,9 @@ public:
 
 	std::optional<sf::Event> pollEvent();
 
-	void render(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
+	void renderMenu();
+
+	void renderGameRunning(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
 	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
 
 	void renderEnemy(const Player& t_player, const Enemy& t_enemy);
@@ -21,6 +23,8 @@ public:
 
 	bool isOpen() const;
 	void close();
+
+	sf::RenderWindow getWindow();
 										
 private:
 	const static int s_screenWidth{ 800 };
@@ -31,4 +35,8 @@ private:
 	float m_maxDepth{ 20.0f };
 	std::vector<float> m_depthBuffer;
 	std::vector<float> m_floorBuffer;
+
+	//temp menu stuff
+	sf::Texture m_menuTexture;
+	sf::Sprite m_menuSprite{ m_menuTexture };
 };

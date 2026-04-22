@@ -1,6 +1,6 @@
 #include "../include/Game.h"
 
-Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
+Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
@@ -8,6 +8,15 @@ Game::Game() : m_window{}, m_DELETEexitGame{false} //when true game will exit
 
 	m_level.loadLevel(1);
 	m_enemy.init(m_level.getWidth(), { 7.0f, 13.0f });
+
+	m_playButton.setSize({ 544, 176 });
+	m_playButton.setPosition({ 128, 16 });
+
+	m_instructionsButton.setSize({ 544, 176 });
+	m_instructionsButton.setPosition({ 128, 208 });
+
+	m_settingsButton.setSize({ 544, 176 });
+	m_settingsButton.setPosition({ 128, 400 });
 }
 
 Game::~Game()
@@ -32,7 +41,7 @@ void Game::run()
 			update(timePerFrame); //60 fps
 		}
 
-		m_window.render(m_player, m_enemy, m_level); // as many as possible
+		//m_window.render(m_player, m_enemy, m_level); // as many as possible
 	}
 }
 
@@ -69,6 +78,29 @@ void Game::checkKeyboardState()
 	}
 }
 
+void Game::processMouseClick()
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+	{
+		sf::Vector2i mouseClick = sf::Mouse::getPosition(m_window.getWindow());
+		std::cout << mouseClick.x << " " << mouseClick.y << "\n";
+
+		if (m_playButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+		{
+			m_gameState = States::GAME_RUNNING;
+			std::cout << "play button clicked" << "\n";
+		}
+		else if (m_instructionsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+		{
+			m_gameState = States::GAME_INSTRUCTIONS;
+		}
+		else if (m_settingsButton.getGlobalBounds().contains({ static_cast<float>(mouseClick.x), static_cast<float>(mouseClick.y) }))
+		{
+			m_gameState = States::GAME_SETTINGS;
+		}
+	}
+}
+
 void Game::update(sf::Time t_deltaTime)
 {
 	if (m_DELETEexitGame)
@@ -79,6 +111,8 @@ void Game::update(sf::Time t_deltaTime)
 	switch (m_gameState)
 	{
 	case States::GAME_MENU:
+		m_window.renderMenu();
+		processMouseClick();
 		break;
 	case States::GAME_SETTINGS:
 		break;
@@ -97,6 +131,8 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			gameOver(true);
 		}
+
+		m_window.renderGameRunning(m_player, m_enemy, m_level);
 
 		break;
 	case States::GAME_WIN:
