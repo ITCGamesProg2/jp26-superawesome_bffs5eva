@@ -10,7 +10,11 @@
 #include <iostream>
 
 #include "Door.h"
+#include "Item.h"
+#include "Key.h"
 #include "Collectible.h"
+
+class Player;
 
 const static int MAX_NEIGHBOORS = 8;
 
@@ -38,12 +42,16 @@ public:
     std::vector<int> breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f t_endPos);
     int asCell(sf::Vector2f t_pos);
 
+    void checkItemPickup(Player& t_player);
     void checkCollision();
+    bool isWalkable(int t_type) const;
     int getTileType(int t_x, int t_y) const;
 
     int getWidth() const;
     int getHeight() const;
+    const std::vector<std::unique_ptr<Item>>& getItems() const;
 
 private:
     LevelData m_level;
+    std::vector<std::unique_ptr<Item>> m_items;
 };

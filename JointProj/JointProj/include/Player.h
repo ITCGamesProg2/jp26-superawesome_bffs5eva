@@ -14,7 +14,7 @@ public:
 	void update();					//updates the player
 	void handleInput(float t_dt, const Level& t_level);
 
-	void onNotify(int t_damage) override;
+	void onNotify(EventType t_event, int t_value) override;
 	void takeDamadge(int t_amount);	//lowers health
 	void pickup();					//pick up item
 

@@ -21,6 +21,9 @@ public:
 	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
 	void renderHUD(const Player& t_player);
 
+	void renderWin();
+	void renderLose();
+
 	void renderEnemy(const Player& t_player, const Enemy& t_enemy);
 	void renderWalls(const Player& t_player, const Level& t_level);
 
@@ -46,6 +49,11 @@ private:
 	sf::Sprite m_instructionsSprite{ m_instructionsTexture };
 	sf::Texture m_settingsTexture;
 	sf::Sprite m_settingsSprite{ m_settingsTexture };
+
+	sf::Texture m_winTexture;
+	sf::Sprite m_winSprite{ m_winTexture };
+	sf::Texture m_loseTexture;
+	sf::Sprite m_loseSprite{ m_loseTexture };
 
 	//HUD
 	sf::Texture m_hudTexture;

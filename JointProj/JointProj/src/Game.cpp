@@ -10,6 +10,11 @@ Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 	m_enemy.init(m_level, { 7.0f, 13.0f });
 	m_enemy.addObserver(&m_player);
 
+	for (auto& item : m_level.getItems())
+	{
+		item->addObserver(&m_player);
+	}
+
 	m_button1.setSize({ 544, 176 });
 	m_button1.setPosition({ 128, 16 });
 
@@ -100,7 +105,7 @@ void Game::processMouseClick(const std::optional<sf::Event> t_event)
 		}
 		else if (m_button3.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
 		{
-			m_gameState = States::GAME_SETTINGS;
+			m_window.close();
 		}
 		break;
 	case States::GAME_INSTRUCTIONS:
@@ -110,6 +115,12 @@ void Game::processMouseClick(const std::optional<sf::Event> t_event)
 			m_gameState = States::GAME_MENU;
 		}
 		break;
+	case States::GAME_WIN:
+	case States::GAME_LOSE:
+		if (m_button2.getGlobalBounds().contains({ static_cast<float>(mouseClick->position.x), static_cast<float>(mouseClick->position.y) }))
+		{
+			m_gameState = States::GAME_MENU;
+		}
 	default:
 		break;
 	}
@@ -135,6 +146,7 @@ void Game::update(sf::Time t_deltaTime)
 		break;
 	case States::GAME_RUNNING:
 		m_player.handleInput(t_deltaTime.asMilliseconds(), m_level);
+		m_level.checkItemPickup(m_player);
 
 		m_enemy.update(t_deltaTime.asMilliseconds(),
 			(m_level.asCell(m_player.getPosition()) == m_level.asCell(m_enemy.getPosition())),
@@ -148,8 +160,10 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.renderGameRunning(m_player, m_enemy, m_level);
 		break;
 	case States::GAME_WIN:
+		m_window.renderWin();
 		break;
 	case States::GAME_LOSE:
+		m_window.renderLose();
 		break;
 	default:
 		break;

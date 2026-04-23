@@ -116,7 +116,7 @@ void Enemy::notifyDamage()
 {
 	for (auto observer : m_observers)
 	{
-		observer->onNotify(m_strategy->getDamage());
+		observer->onNotify(EventType::DAMAGE_PLAYER, m_strategy->getDamage());
 	}
 }
 

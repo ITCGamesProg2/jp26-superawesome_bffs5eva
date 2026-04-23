@@ -2,7 +2,11 @@
 
 #include "Item.h"
 
-class Collectible : Item
+class Collectible : public Item
 {
-	void pickup() override;			//become picked up
+public:
+    void init(sf::Vector2f t_pos);
+    void pickup() override;                 //become picked up
+
+    sf::Vector2f getPosition() const override;
 };

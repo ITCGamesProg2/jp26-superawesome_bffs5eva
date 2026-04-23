@@ -25,6 +25,20 @@ Window::Window() : m_window(sf::VideoMode({ s_screenWidth, s_screenHeight }), "G
 
 	m_settingsSprite.setTexture(m_settingsTexture, true);
 
+	if (!m_winTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\WIN.png"))
+	{
+		std::cout << "problem loading instructions texture" << std::endl;
+	}
+
+	m_winSprite.setTexture(m_winTexture, true);
+
+	if (!m_loseTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\LOSE.png"))
+	{
+		std::cout << "problem loading settings texture" << std::endl;
+	}
+
+	m_loseSprite.setTexture(m_loseTexture, true);
+
 	//font
 	if (!m_font.openFromFile("Resources\\ASSETS\\FONTS\\Jersey20-Regular.ttf"))
 	{
@@ -321,6 +335,24 @@ void Window::renderHUD(const Player& t_player)
 	//keys
 	m_keyText.setString("Key : " + std::to_string(t_player.getKeyCount()));
 	m_window.draw(m_keyText);
+}
+
+void Window::renderWin()
+{
+	m_window.clear();
+
+	m_window.draw(m_winSprite);
+
+	m_window.display();
+}
+
+void Window::renderLose()
+{
+	m_window.clear();
+
+	m_window.draw(m_loseSprite);
+
+	m_window.display();
 }
 
 bool Window::isOpen() const

@@ -1,4 +1,5 @@
 #include "../include/Level.h"
+#include "../include/Player.h"
 
 void operator >> (const YAML::Node& t_tileNode, tileData& t_tile)
 {
@@ -38,6 +39,33 @@ void Level::loadLevel(int t_levelNr)
 	YAML::Node baseNode = YAML::LoadFile(filename);
 	baseNode >> m_level;
 
+	const YAML::Node& mapNode = baseNode["map"];
+
+	for (int y = 0; y < m_level.m_height; ++y)
+	{
+		for (int x = 0; x < m_level.m_width; ++x)
+		{
+			int type = mapNode[y][x].as<int>();
+
+			if (type == 3)
+			{
+				auto key = std::make_unique<Key>();
+				key->init({ (float)x, (float)y });
+				m_items.push_back(std::move(key));
+
+				m_level.m_tiles[y * m_level.m_width + x].m_type = 0;
+			}
+			else if (type == 4)
+			{
+				auto col = std::make_unique<Collectible>();
+				col->init({ (float)x, (float)y });
+				m_items.push_back(std::move(col));
+
+				m_level.m_tiles[y * m_level.m_width + x].m_type = 0;
+			}
+		}
+	}
+
 	for (int i = 0; i < m_level.m_tiles.size(); i++)
 	{
 		loadTileNeighboors(i, i / m_level.m_width, i % m_level.m_width);
@@ -59,11 +87,13 @@ void Level::loadTileNeighboors(int t_index, int t_row, int t_col)
 		newRow = t_row + rowOffset[i];
 		newCol = t_col + colOffset[i];
 
-		if (newRow >= 0 && newRow < m_level.m_height && newCol >= 0 && newCol < m_level.m_width) 
+		if (newRow < 0 || newRow >= m_level.m_height || newCol < 0 || newCol >= m_level.m_width)
 		{
-			newTile = (newRow * m_level.m_width) + newCol;
-			m_level.m_tiles.at(t_index).m_neighboors.push_back(newTile);
+			continue;
 		}
+
+		newTile = (newRow * m_level.m_width) + newCol;
+		m_level.m_tiles.at(t_index).m_neighboors.push_back(newTile);
 	}
 }
 
@@ -72,7 +102,7 @@ std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f
 	int startCell = asCell(t_startPos);
 	int endCell = asCell(t_endPos);
 
-	if (m_level.m_tiles[startCell].m_type != 0 || m_level.m_tiles[endCell].m_type != 0)
+	if (!isWalkable(m_level.m_tiles[startCell].m_type) || !isWalkable(m_level.m_tiles[endCell].m_type))
 	{
 		return {};
 	}
@@ -101,7 +131,7 @@ std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f
 
 		for (int neighboor : m_level.m_tiles.at(current).m_neighboors)
 		{
-			if (visited.at(neighboor) || m_level.m_tiles.at(neighboor).m_type != 0) continue;
+			if (visited.at(neighboor) || !isWalkable(m_level.m_tiles.at(neighboor).m_type)) continue;
 
 			currentRow = current / m_level.m_width;
 			currentCol = current % m_level.m_width;
@@ -117,7 +147,7 @@ std::vector<int> Level::breadthFirstSearch(sf::Vector2f t_startPos, sf::Vector2f
 				tile1 = currentRow * m_level.m_width + (currentCol + dCol); //horizontal
 				tile2 = (currentRow + dRow) * m_level.m_width + currentCol; //vertical
 
-				if (m_level.m_tiles.at(tile1).m_type != 0 || m_level.m_tiles.at(tile2).m_type != 0)
+				if (!isWalkable(m_level.m_tiles.at(tile1).m_type) || !isWalkable(m_level.m_tiles.at(tile2).m_type))
 				{
 					continue;
 				}
@@ -156,8 +186,27 @@ int Level::asCell(sf::Vector2f t_pos)
 	return y * m_level.m_width + x;
 }
 
+void Level::checkItemPickup(Player& t_player)
+{
+	for (auto& item : m_items)
+	{
+		if (!item || !item->isActive()) continue;
+
+		if ((int)item->getPosition().x == (int)t_player.getPosition().x &&
+			(int)item->getPosition().y == (int)t_player.getPosition().y)
+		{
+			item->pickup();
+		}
+	}
+}
+
 void Level::checkCollision()
 {
+}
+
+bool Level::isWalkable(int t_type) const
+{
+	return t_type != 1;
 }
 
 int Level::getTileType(int t_x, int t_y) const
@@ -174,4 +223,9 @@ int Level::getWidth() const
 int Level::getHeight() const
 { 
 	return m_level.m_height; 
+}
+
+const std::vector<std::unique_ptr<Item>>& Level::getItems() const
+{
+	return m_items;
 }

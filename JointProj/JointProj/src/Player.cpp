@@ -38,10 +38,10 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	sf::Vector2f newPosX = { newPos.x, m_position.y };
 	sf::Vector2f newPosY = { m_position.x, newPos.y };
 
-	if (t_level.getTileType((int)newPosX.x, (int)newPosX.y) == 0) m_position.x = newPosX.x; 
+	if (t_level.getTileType((int)newPosX.x, (int)newPosX.y) != 1) m_position.x = newPosX.x; 
 	else m_velocity.x = 0.0f; 
 
-	if (t_level.getTileType((int)newPosY.x, (int)newPosY.y) == 0) m_position.y = newPosY.y;
+	if (t_level.getTileType((int)newPosY.x, (int)newPosY.y) != 1) m_position.y = newPosY.y;
 	else m_velocity.y = 0.0f; 
 
 	//rotating
@@ -63,9 +63,25 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	//std::cout << "X :" << std::to_string(m_position.x) << " Y :"  << std::to_string(m_position.y) << "\n";
 }
 
-void Player::onNotify(int t_damage)
+void Player::onNotify(EventType t_event, int t_value)
 {
-	takeDamadge(t_damage);
+	switch (t_event)
+	{
+	case EventType::KEY_ACQUIRED:
+		m_keyCount++;
+		break;
+
+	case EventType::COLLECTIBLE_ACQUIRED:
+		m_collectibleCount++;
+		break;
+
+	case EventType::DAMAGE_PLAYER:
+		takeDamadge(t_value);
+		break;
+
+	default:
+		break;
+	}
 }
 
 void Player::takeDamadge(int t_amount)

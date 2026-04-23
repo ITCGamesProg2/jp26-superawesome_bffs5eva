@@ -2,8 +2,11 @@
 
 #include "Item.h"
 
-class Key : Item
+class Key : public Item
 {
-	void init(sf::Vector2f t_pos);					//called to spawn key
-	void pickup() override;			//become picked up
+public:
+    void init(sf::Vector2f t_pos);          //called to spawn key
+    void pickup() override;                 //become picked up
+
+    sf::Vector2f getPosition() const override;
 };
