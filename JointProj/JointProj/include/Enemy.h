@@ -2,6 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <vector>
+
+#include "Observer.h"
 #include "Level.h"
 
 enum EnemyStates {IDLE, RUN, ATTACK, DIE, STATE_COUNT};
@@ -30,11 +33,16 @@ public:
 	void init(const Level& t_level, sf::Vector2f t_pos);					//called to spawns enenmy
 
 	void update(float t_dt, bool t_sameCell, std::vector<int> t_path);		//updates the enemy
+	void addObserver(Observer* t_observer);
 
 	sf::Vector2f getPosition() const;
 	sf::Sprite getSprite() const;
 									
 private:
+	// ---------------- OBSERVER ----------------//
+	void notifyDamage();
+	std::vector<Observer*> m_observers;
+
 	// ---------------- FSM ----------------//
 	bool canEnterState(EnemyStates t_newState);
 	void changeState(float dt, EnemyStates newState);
@@ -80,7 +88,8 @@ private:
 	sf::Vector2f m_velocity;
 	const static int m_MAX_SPEED{ 50 };
 
-	const static int m_damadgeAmount{ 10 };
+	bool m_hasDealtDamage{ false };
+	const static int m_damadgeAmount{ 5 };
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite{ m_texture };
@@ -94,6 +103,7 @@ private:
 	int m_animRow{ 0 };
 	int m_frameCount{ 1 };
 	int m_currentFrame{ 0 };
+	int m_previousFrame{ 0 };
 
 	float m_animTimer{ 0.0f };
 	float m_frameTime{ 0.12f };

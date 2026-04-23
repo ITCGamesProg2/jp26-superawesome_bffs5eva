@@ -57,6 +57,11 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	//std::cout << "X :" << std::to_string(m_position.x) << " Y :"  << std::to_string(m_position.y) << "\n";
 }
 
+void Player::onNotify(int t_damage)
+{
+	takeDamadge(t_damage);
+}
+
 void Player::takeDamadge(int t_amount)
 {
 	m_health = m_health - t_amount;
@@ -101,7 +106,7 @@ int Player::getHealth() const
 
 float Player::getHealthPercent() const
 {
-	return m_health/m_MAX_HEALTH;
+	return static_cast<float>(m_health) / static_cast<float>(m_MAX_HEALTH);
 }
 
 int Player::getCollectibleCount() const

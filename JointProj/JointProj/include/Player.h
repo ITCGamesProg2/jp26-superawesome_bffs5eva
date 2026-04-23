@@ -2,20 +2,19 @@
 
 #include <SFML/Graphics.hpp>
 
-//#include <iostream>
-//#include <string>
-
+#include "Observer.h"
 #include "Level.h"
 
 #include "BulletManager.h"
 #include "Cards.h"
 
-class Player
+class Player : public Observer
 {
 public:
 	void update();					//updates the player
 	void handleInput(float t_dt, const Level& t_level);
 
+	void onNotify(int t_damage) override;
 	void takeDamadge(int t_amount);	//lowers health
 	void pickup();					//pick up item
 

@@ -8,6 +8,7 @@ Game::Game() : m_window{}, m_DELETEexitGame{ false } //when true game will exit
 
 	m_level.loadLevel(1);
 	m_enemy.init(m_level, { 7.0f, 13.0f });
+	m_enemy.addObserver(&m_player);
 
 	m_button1.setSize({ 544, 176 });
 	m_button1.setPosition({ 128, 16 });

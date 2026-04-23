@@ -20,7 +20,7 @@ Enemy::Enemy()
 	//defining valid transitions for each state
 	static int idleNext[] = { RUN, ATTACK, DIE };
 	static int runNext[] = { IDLE, ATTACK, DIE };
-	static int attackNext[] = { RUN, DIE };
+	static int attackNext[] = { IDLE, RUN, DIE };
 	static int dieNext[] = { IDLE }; //DIE state needs a possible transition or it has error
 
 	//configure state behaviours - name, entry, update, exit, allowed transitions
@@ -87,8 +87,21 @@ void Enemy::update(float t_dt, bool t_sameCell, std::vector<int> t_path)
 
 	m_inSameCell = t_sameCell;
 
-	updateState(t_dt); //update FSM
 	updateAnimation(t_dt); //update animation frame
+	updateState(t_dt); //update FSM
+}
+
+void Enemy::addObserver(Observer* t_observer)
+{
+	m_observers.push_back(t_observer);
+}
+
+void Enemy::notifyDamage()
+{
+	for (auto observer : m_observers)
+	{
+		observer->onNotify(m_damadgeAmount);
+	}
 }
 
 void Enemy::railMoveTowards()
@@ -139,6 +152,7 @@ void Enemy::updateAnimation(float dt)
 	if (m_animTimer >= m_frameTime)
 	{
 		m_animTimer = 0.0f;
+		m_previousFrame = m_currentFrame;
 		m_currentFrame++;
 
 		//special case: death locks at end
@@ -228,6 +242,8 @@ void Enemy::Run_Update(Enemy* t_enemy, float t_dt)
 	if (t_enemy->m_path.empty()) //idle if loose path
 	{
 		t_enemy->changeState(t_dt, IDLE);
+
+		return;
 	}
 }
 
@@ -240,7 +256,8 @@ void Enemy::Attack_Entry(Enemy* t_enemy, float t_dt)
 {
 	t_enemy->m_velocity = { 0,0 };
 	t_enemy->setAnimation(2, 3, 0.12f); //row 2, 3 frames
-	std::cout << "entering attack" << "\n";
+	t_enemy->m_hasDealtDamage = false;
+	std::cout << "entering attack\n";
 }
 
 void Enemy::Attack_Update(Enemy* t_enemy, float t_dt)
@@ -248,6 +265,20 @@ void Enemy::Attack_Update(Enemy* t_enemy, float t_dt)
 	if (!t_enemy->m_inSameCell) //return to chasing if player leaves tile
 	{
 		t_enemy->changeState(t_dt, RUN);
+
+		return;
+	}
+
+	if (t_enemy->m_currentFrame == 2 && !t_enemy->m_hasDealtDamage)
+	{
+		t_enemy->notifyDamage();
+		std::cout << "damadge\n";
+
+		t_enemy->m_hasDealtDamage = true;
+
+		t_enemy->changeState(t_dt, IDLE);
+
+		return;
 	}
 }
 
@@ -268,6 +299,8 @@ void Enemy::Die_Update(Enemy* t_enemy , float t_dt)
 	if (100 == 200)//placeholder (no transitions allowed)
 	{
 		t_enemy->changeState(t_dt, IDLE);
+
+		return;
 	}
 }
 
