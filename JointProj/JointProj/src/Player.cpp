@@ -52,11 +52,13 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) shoot();
 
 	//heal
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+	bool currentHealKey = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down);
+	if (currentHealKey && !m_healIsPrevKey)
 	{
 		useCollectible();
-		std::cout << "into healing" << "\n";
 	}
+
+	m_healIsPrevKey = currentHealKey;
 
 	//std::cout << "X :" << std::to_string(m_position.x) << " Y :"  << std::to_string(m_position.y) << "\n";
 }
@@ -83,10 +85,11 @@ void Player::useCollectible()
 {
 	if (m_collectibleCount > 0 && m_health < m_MAX_HEALTH)
 	{
+		std::cout << m_health << "\n";
 		int healAmount = m_cardHand.calculateValue();
+		std::cout << healAmount << "\n";
 		heal(healAmount);
 		m_collectibleCount--;
-		std::cout << "healing" << "\n";
 	}
 }
 

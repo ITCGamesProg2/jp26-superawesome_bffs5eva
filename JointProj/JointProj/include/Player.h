@@ -50,4 +50,7 @@ private:
 
 	int m_collectibleCount{ 5 };
 	int m_keyCount{ 0 };
+
+	bool m_healIsPrevKey{ false };
+	bool m_healKeyPressed{ false };
 };

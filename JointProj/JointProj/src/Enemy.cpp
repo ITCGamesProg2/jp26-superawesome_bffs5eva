@@ -195,7 +195,6 @@ void Enemy::Idle_Entry(Enemy* t_enemy, float t_dt)
 {
 	t_enemy->m_velocity = { 0,0 };
 	t_enemy->setAnimation(0, 1, 0.2f); //row 0, 1 frame
-	std::cout << "entering idle" << "\n";
 }
 
 void Enemy::Idle_Update(Enemy* t_enemy, float t_dt)
@@ -225,7 +224,6 @@ void Enemy::Idle_Exit(Enemy* t_enemy, float t_dt)
 void Enemy::Run_Entry(Enemy* t_enemy, float t_dt) 
 {
 	t_enemy->setAnimation(1, 4, 0.1); //row 1, 4 frames
-	std::cout << "entering run" << "\n";
 }
 
 void Enemy::Run_Update(Enemy* t_enemy, float t_dt)
@@ -257,7 +255,6 @@ void Enemy::Attack_Entry(Enemy* t_enemy, float t_dt)
 	t_enemy->m_velocity = { 0,0 };
 	t_enemy->setAnimation(2, 3, 0.12f); //row 2, 3 frames
 	t_enemy->m_hasDealtDamage = false;
-	std::cout << "entering attack\n";
 }
 
 void Enemy::Attack_Update(Enemy* t_enemy, float t_dt)
@@ -272,7 +269,6 @@ void Enemy::Attack_Update(Enemy* t_enemy, float t_dt)
 	if (t_enemy->m_currentFrame == 2 && !t_enemy->m_hasDealtDamage)
 	{
 		t_enemy->notifyDamage();
-		std::cout << "damadge\n";
 
 		t_enemy->m_hasDealtDamage = true;
 
@@ -291,7 +287,6 @@ void Enemy::Die_Entry(Enemy* t_enemy, float t_dt)
 {
 	t_enemy->m_isActive = false;
 	t_enemy->setAnimation(3, 5, 0.15f); //row 3, 5 frames
-	std::cout << "entering die" << "\n";
 }
 
 void Enemy::Die_Update(Enemy* t_enemy , float t_dt) 
