@@ -66,21 +66,6 @@ void Player::pickup()
 {
 }
 
-sf::Vector2f Player::getPosition() const
-{
-	return m_position;
-}
-
-float Player::getAngle() const
-{
-	return m_angle;
-}
-
-int Player::getHealth() const
-{
-	return m_health;
-}
-
 void Player::shoot()
 {
 }
@@ -97,4 +82,34 @@ void Player::useCollectible()
 void Player::heal(int t_amount)
 {
 	m_health = m_health + t_amount;
+}
+
+sf::Vector2f Player::getPosition() const
+{
+	return m_position;
+}
+
+float Player::getAngle() const
+{
+	return m_angle;
+}
+
+int Player::getHealth() const
+{
+	return m_health;
+}
+
+float Player::getHealthPercent() const
+{
+	return m_health/m_MAX_HEALTH;
+}
+
+int Player::getCollectibleCount() const
+{
+	return m_collectibleCount;
+}
+
+int Player::getKeyCount() const
+{
+	return m_keyCount;
 }

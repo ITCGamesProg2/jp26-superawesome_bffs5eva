@@ -22,6 +22,9 @@ public:
 	sf::Vector2f getPosition() const;
 	float getAngle() const;
 	int getHealth() const;
+	float getHealthPercent() const;
+	int getCollectibleCount() const;
+	int getKeyCount() const;
 									
 private:
 	void shoot();					//shoots a bullet
