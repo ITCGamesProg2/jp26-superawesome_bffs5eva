@@ -1,11 +1,48 @@
 #include "../include/Cards.h"
 
+Cards::Cards()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 1; j <= 13; j++)
+        {
+            m_deck.push_back({ static_cast<CardType>(i), j });
+        }
+    }
+}
+
+void Cards::shuffleDeck()
+{
+    for (int i = m_deck.size() - 1; i > 0; i--)
+    {
+        int swaper = rand() % (i + 1);
+        std::swap(m_deck[i], m_deck[swaper]);
+    }
+}
+
 void Cards::generateHand()
 {
+    if (m_deck.size() < m_CARDS_PER_HAND)
+    {
+        m_deck.clear();
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 1; j <= 13; j++)
+            {
+                m_deck.push_back({ static_cast<CardType>(i), j });
+            }
+        }
+    }
+
+    shuffleDeck();
+
+    m_hand.clear();
+
     for (int i = 0; i < m_CARDS_PER_HAND; i++)
     {
-        m_cardType[i] = static_cast<CardType>(rand() % 4);
-        m_cardNumber[i] = (rand() % 13) + 1;
+        m_hand.push_back(m_deck.back());
+        m_deck.pop_back();
     }
 }
 
@@ -18,10 +55,10 @@ int Cards::calculateValue()
     int count[14] = { 0 };
     int typeCount[4] = { 0 };
 
-    for (int i = 0; i < m_CARDS_PER_HAND; i++)
+    for (const auto& card : m_hand)
     {
-        count[m_cardNumber[i]]++;
-        typeCount[m_cardType[i]]++;
+        count[card.second]++;
+        typeCount[card.first]++;
     }
 
     //flags for types of hands
@@ -78,7 +115,7 @@ int Cards::calculateValue()
         //fallback, no combinations
         for (int i = 0; i < m_CARDS_PER_HAND; i++)
         {
-            value = value + m_cardNumber[i];
+            value = value + m_hand.at(i).second;
         }
 
         value = value / 5; //less than for no combo
