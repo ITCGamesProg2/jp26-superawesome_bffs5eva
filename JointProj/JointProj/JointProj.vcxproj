@@ -30,6 +30,7 @@
     <ClInclude Include="include\Item.h" />
     <ClInclude Include="include\Key.h" />
     <ClInclude Include="include\Level.h" />
+    <ClInclude Include="include\Observer.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
@@ -70,6 +71,7 @@
     <ClCompile Include="src\main.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="src\Observer.cpp" />
     <ClCompile Include="src\Player.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
