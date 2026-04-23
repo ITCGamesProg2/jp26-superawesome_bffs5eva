@@ -43,7 +43,7 @@ private:
 	const static int m_ROTATION_SPEED{ 2 };
 
 	Cards m_cardHand;
-	const static int m_MAX_HEALTH{ 100 };
+	const static int m_MAX_HEALTH{ 500 };
 	int m_health{ m_MAX_HEALTH };
 
 	BulletManager m_bulletManager;
