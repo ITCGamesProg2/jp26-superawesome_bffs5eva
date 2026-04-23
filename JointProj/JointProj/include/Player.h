@@ -48,6 +48,6 @@ private:
 
 	BulletManager m_bulletManager;
 
-	int m_collectibleCount{ 0 };
+	int m_collectibleCount{ 5 };
 	int m_keyCount{ 0 };
 };
