@@ -52,7 +52,11 @@ void Player::handleInput(float t_dt, const Level& t_level)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) shoot();
 
 	//heal
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) useCollectible();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+	{
+		useCollectible();
+		std::cout << "into healing" << "\n";
+	}
 
 	//std::cout << "X :" << std::to_string(m_position.x) << " Y :"  << std::to_string(m_position.y) << "\n";
 }
@@ -82,6 +86,7 @@ void Player::useCollectible()
 		int healAmount = m_cardHand.calculateValue();
 		heal(healAmount);
 		m_collectibleCount--;
+		std::cout << "healing" << "\n";
 	}
 }
 
