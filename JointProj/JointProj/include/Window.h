@@ -19,6 +19,7 @@ public:
 
 	void renderGameRunning(const Player& t_player, const Enemy& t_enemy, const Level& t_level);						//renders game
 	void renderMiniMap(const Player& t_player, const Enemy& t_enemy, const Level& t_level);				//renders MiniMap
+	void renderHUD(const Player& t_player);
 
 	void renderEnemy(const Player& t_player, const Enemy& t_enemy);
 	void renderWalls(const Player& t_player, const Level& t_level);
@@ -45,4 +46,12 @@ private:
 	sf::Sprite m_instructionsSprite{ m_instructionsTexture };
 	sf::Texture m_settingsTexture;
 	sf::Sprite m_settingsSprite{ m_settingsTexture };
+
+	//HUD
+	sf::Texture m_hudTexture;
+	sf::Sprite m_hudSprite{ m_hudTexture };
+
+	sf::Font m_font;
+	sf::Text m_collectibleText{ m_font };
+	sf::Text m_keyText{ m_font };
 };

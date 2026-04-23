@@ -24,6 +24,30 @@ Window::Window() : m_window(sf::VideoMode({ s_screenWidth, s_screenHeight }), "G
 	}
 
 	m_settingsSprite.setTexture(m_settingsTexture, true);
+
+	//font
+	if (!m_font.openFromFile("Resources\\ASSETS\\FONTS\\Jersey20-Regular.ttf"))
+	{
+		std::cout << "problem loading arial black font in window.cpp" << std::endl;
+	}
+
+	m_collectibleText.setFont(m_font);
+	m_collectibleText.setCharacterSize(18);
+	m_collectibleText.setFillColor(sf::Color::Black);
+	m_keyText = m_collectibleText;
+	m_collectibleText.setPosition({ 468.0f, (float)s_screenHeight - 100.0f + 36.0f });
+	m_keyText.setPosition({ 628.0f, (float)s_screenHeight - 100.0f + 36.0f });
+
+	//HUD
+	if (!m_hudTexture.loadFromFile("Resources\\ASSETS\\IMAGES\\HUD.png"))
+	{
+		std::cout << "problem loading hud texture" << std::endl;
+	}
+
+	m_hudSprite.setTexture(m_hudTexture, true);
+	m_hudSprite.setPosition({ 0.f, (float)s_screenHeight - 100.f });
+
+	//std::cout << "HUD texture size: " << m_hudTexture.getSize().x << " x " << m_hudTexture.getSize().y << std::endl;
 }
 
 std::optional<sf::Event> Window::pollEvent()
@@ -65,6 +89,7 @@ void Window::renderGameRunning(const Player& t_player, const Enemy& t_enemy, con
 	renderWalls(t_player, t_level);
 	renderEnemy(t_player, t_enemy);
 	renderMiniMap(t_player, t_enemy, t_level);
+	renderHUD(t_player);
 
 	m_window.display();
 }
@@ -264,6 +289,38 @@ void Window::renderMiniMap(const Player& t_player, const Enemy& t_enemy, const L
 			}
 		}
 	}
+}
+
+void Window::renderHUD(const Player& t_player)
+{
+	m_window.draw(m_hudSprite);
+
+	//health bar
+	float healthPercent = t_player.getHealthPercent(); //get health percentage
+
+	float barStartX = 32.0f;
+	float barEndX = 336.0f;
+	float barWidthMax = barEndX - barStartX;
+	float currentWidth = barWidthMax * healthPercent;
+
+	sf::RectangleShape healthBar;
+	healthBar.setPosition({ barStartX, (float)s_screenHeight - 100.0f + 32.0f });
+	healthBar.setSize({ currentWidth, 32.0f });
+	
+	//change bar colour depending on health percentage
+	if (healthPercent > 0.6f) healthBar.setFillColor(sf::Color::Green);
+	else if (healthPercent > 0.3f) healthBar.setFillColor(sf::Color::Yellow);
+	else healthBar.setFillColor(sf::Color::Red);
+
+	m_window.draw(healthBar);
+
+	//collectibles
+	m_collectibleText.setString("Tokens : " + std::to_string(t_player.getCollectibleCount()));
+	m_window.draw(m_collectibleText);
+
+	//keys
+	m_keyText.setString("Key : " + std::to_string(t_player.getKeyCount()));
+	m_window.draw(m_keyText);
 }
 
 bool Window::isOpen() const
