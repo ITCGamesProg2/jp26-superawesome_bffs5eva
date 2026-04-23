@@ -13,7 +13,6 @@ class Enemy;
 
 typedef void (*StateFunc)(Enemy*, float);
 
-
 struct StateConfig
 {
 	const char* name;
@@ -26,11 +25,46 @@ struct StateConfig
 	int nextStatesCount;
 };
 
+class EnemyStrategy
+{
+public:
+	virtual ~EnemyStrategy() = default;
+
+	virtual float getSpeed() const = 0;
+	virtual int getDamage() const = 0;
+	virtual const char* getName() const = 0;
+};
+
+class SpeedStratergy : public EnemyStrategy
+{
+public:
+	float getSpeed() const override { return 0.08f; }
+	int getDamage() const override { return 2; }
+	const char* getName() const override { return "SpeedStratergy"; }
+};
+
+class CrawlerStrategy : public EnemyStrategy
+{
+public:
+	float getSpeed() const override { return 0.03f; }
+	int getDamage() const override { return 10; }
+	const char* getName() const override { return "CrawlerStrategy"; }
+};
+
+class BalancedStrategy : public EnemyStrategy
+{
+public:
+	float getSpeed() const override { return 0.05f; }
+	int getDamage() const override { return 5; }
+	const char* getName() const override { return "BalancedStrategy"; }
+};
+
 class Enemy
 {
 public:
 	Enemy();
 	void init(const Level& t_level, sf::Vector2f t_pos);					//called to spawns enenmy
+	void setStrategy(EnemyStrategy* strategy);
 
 	void update(float t_dt, bool t_sameCell, std::vector<int> t_path);		//updates the enemy
 	void addObserver(Observer* t_observer);
@@ -78,6 +112,11 @@ private:
 	// ---------------- VARIABLES ----------------//
 	const Level* m_level{ nullptr };
 	int m_levelWidth;
+
+	EnemyStrategy* m_strategy{ nullptr };
+	static SpeedStratergy m_speedStrategy;
+	static CrawlerStrategy m_crawlerStrategy;
+	static BalancedStrategy m_balancedStrategy;
 
 	bool m_inSameCell{ false };
 	std::vector<int> m_path;

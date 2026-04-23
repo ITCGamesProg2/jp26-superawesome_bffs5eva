@@ -1,8 +1,13 @@
 #include "../include/Enemy.h"
 
+SpeedStratergy Enemy::m_speedStrategy;
+CrawlerStrategy Enemy::m_crawlerStrategy;
+BalancedStrategy Enemy::m_balancedStrategy;
+
 Enemy::Enemy()
 {
 	m_isActive = false;
+	m_strategy = &m_balancedStrategy;
 
 	if (!m_texture.loadFromFile("Resources\\ASSETS\\IMAGES\\enemy_spritesheet.png"))
 	{
@@ -41,6 +46,17 @@ void Enemy::init(const Level& t_level, sf::Vector2f t_pos)
 
 	m_level = &t_level;
 	m_levelWidth = m_level->getWidth();
+
+	int rnadNum = rand() % 3;
+
+	if (rnadNum == 0) setStrategy(&m_speedStrategy);
+	if (rnadNum == 1) setStrategy(&m_crawlerStrategy);
+	if (rnadNum == 2) setStrategy(&m_balancedStrategy);
+}
+
+void Enemy::setStrategy(EnemyStrategy* strategy)
+{
+	m_strategy = strategy;
 }
 
 bool Enemy::canEnterState(EnemyStates t_newState)
@@ -100,7 +116,7 @@ void Enemy::notifyDamage()
 {
 	for (auto observer : m_observers)
 	{
-		observer->onNotify(m_damadgeAmount);
+		observer->onNotify(m_strategy->getDamage());
 	}
 }
 
@@ -131,7 +147,7 @@ void Enemy::railMoveTowards()
 		m_direction /= length;
 	}
 
-	m_velocity = m_direction * 0.05f;
+	m_velocity = m_direction * m_strategy->getSpeed();
 	m_position += m_velocity;
 }
 
