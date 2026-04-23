@@ -76,7 +76,7 @@ void Window::render(const Player& t_player, const Level& t_level, BulletManager&
 		if (t_bulletManager.isActive(index))
 		{
 			sf::RectangleShape bullet;
-			bullet.setSize(sf::Vector2f(10, 10));
+			bullet.setSize(sf::Vector2f(5, 5));
 			bullet.setPosition(t_bulletManager.getPos(index));
 			m_window.draw(bullet);
 		}

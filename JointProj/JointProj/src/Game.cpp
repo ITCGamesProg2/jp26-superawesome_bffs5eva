@@ -130,9 +130,9 @@ void Game::setupSprites()
 
 void Game::setupAudio()
 {
-	if (!m_DELETEsoundBuffer.loadFromFile("Resources\\ASSETS\\AUDIO\\beep.wav"))
-	{
-		std::cout << "Error loading beep sound" << std::endl;
-	}
-	m_DELETEsound.play(); // test sound
+	//if (!m_DELETEsoundBuffer.loadFromFile("Resources\\ASSETS\\AUDIO\\beep.wav"))
+	//{
+	//	std::cout << "Error loading beep sound" << std::endl;
+	//}
+	//m_DELETEsound.play(); // test sound
 }

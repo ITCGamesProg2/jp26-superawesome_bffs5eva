@@ -7,6 +7,7 @@ void BulletManager::spawnBullets(sf::Vector2f t_playerPos, float t_playerAngle)
 		if (!bullets[index].checkActive())
 		{
 			bullets[index].init(t_playerPos, t_playerAngle);
+			break;
 		}
 	}
 }
