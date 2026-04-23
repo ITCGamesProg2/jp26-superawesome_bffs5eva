@@ -81,12 +81,14 @@ void Player::useCollectible()
 	{
 		int healAmount = m_cardHand.calculateValue();
 		heal(healAmount);
+		m_collectibleCount--;
 	}
 }
 
 void Player::heal(int t_amount)
 {
 	m_health = m_health + t_amount;
+	if (m_health > m_MAX_HEALTH) m_health = m_MAX_HEALTH;
 }
 
 sf::Vector2f Player::getPosition() const
