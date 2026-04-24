@@ -104,7 +104,6 @@ class Bullet_Manager {
     -position
     -isActive
 
-    +spawn()
     +pickedup()
 }
 
