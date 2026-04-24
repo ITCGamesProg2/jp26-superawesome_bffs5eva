@@ -1,7 +1,7 @@
 ```mermaid
 classDiagram
     class Item {
-        <<abstract>>
+        <<interface>>
         -vector~Observer*~ m_observers
         +addObserver(Observer*)
         +pickup()
