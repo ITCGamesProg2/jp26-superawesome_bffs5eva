@@ -1,13 +1,7 @@
 ```mermaid
 classDiagram
-    class Level {
-        -m_items : vector<Item*>
-        +loadLevel()
-        +checkItemPickup()
-    }
-
     class Item {
-<<interface>>
+        <<abstract>>
         -vector~Observer*~ m_observers
         +addObserver(Observer*)
         +pickup()
@@ -16,7 +10,7 @@ classDiagram
         #m_isActive bool
     }
 
-    class Collectible {
+   class Collectible {
         +pickup()
         +getPosition() sf::Vector2f
     }
@@ -26,7 +20,12 @@ classDiagram
         +getPosition() sf::Vector2f
     }
 
-    Level --> Item : depends on abstraction
+    class PossibleFutureItem {
+        +pickup()
+        +getPosition() sf::Vector2f
+    }
+
     Item <|-- Key
     Item <|-- Collectible
+    Item <|-- PossibleFutureItem
 ```
